@@ -17,8 +17,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,33 +27,10 @@ import androidx.compose.ui.unit.sp
 
 data class FAQItem(
     val title: String,
-    //val answer: String,
+    val answer: String,
     val isExpanded: Boolean = false
 )
 
-@Composable
-fun FAQSection() {
-
-    val faqList = remember {
-        mutableStateListOf(
-            FAQItem("Booking Issues"),
-            FAQItem("Payment Queries"),
-            FAQItem("Partner Verification"),
-            FAQItem("Cancel Request")
-        )
-    }
-
-    Column {
-        faqList.forEachIndexed { index, item ->
-            FAQCard(
-                item = item,
-                onClick = {
-                    faqList[index] = item.copy(isExpanded = !item.isExpanded)
-                }
-            )
-        }
-    }
-}
 @Composable
 fun FAQCard(item: FAQItem, onClick: () -> Unit) {
 
@@ -102,7 +77,7 @@ fun FAQCard(item: FAQItem, onClick: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = item.title,
+                text = item.answer,
                 fontSize = 14.sp,
                 color = Color.DarkGray
             )
