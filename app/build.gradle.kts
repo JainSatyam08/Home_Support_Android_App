@@ -64,6 +64,7 @@ dependencies {
     // Location aur Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation(libs.androidx.compose.runtime)
 
     // Testing (Inhe chhedne ki zaroorat nahi hai)
     testImplementation(libs.junit)

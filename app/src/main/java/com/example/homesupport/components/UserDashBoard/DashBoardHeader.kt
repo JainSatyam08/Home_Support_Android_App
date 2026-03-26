@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.UserDashBoard
+package com.example.homesupport.components.UserDashBoard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.example.homesupport.Components.Profile.HeaderSection
-import com.example.homesupport.Components.Profile.MainCardSection
+import com.example.homesupport.components.profile.HeaderSection
+import com.example.homesupport.components.profile.MainCardSection
 
 @Composable
 fun ProfileScreen(

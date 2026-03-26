@@ -1,7 +1,6 @@
-package com.example.homesupport.Components.UserDashBoard
+package com.example.homesupport.components.UserDashBoard
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.List

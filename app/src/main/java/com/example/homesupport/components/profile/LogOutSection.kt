@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.Profile
+package com.example.homesupport.components.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box

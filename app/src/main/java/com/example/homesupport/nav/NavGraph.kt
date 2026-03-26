@@ -1,5 +1,7 @@
 package com.example.homesupport.nav
 
+import com.example.homesupport.screens.MyRequests
+
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -7,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.homesupport.screens.LoginScreen
-import com.example.homesupport.screens.Myrequests
+
 import com.example.homesupport.screens.NewRequestScreen
 import com.example.homesupport.screens.ProfileScreen
 import com.example.homesupport.screens.SplashScreen
@@ -30,7 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
             UserDashboard(navController)
         }
         composable("requests") {
-            Myrequests(navController)
+             MyRequests(navController)
 
         }
         composable("profile") {

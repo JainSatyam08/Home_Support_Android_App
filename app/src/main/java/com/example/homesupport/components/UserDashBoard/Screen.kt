@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.UserDashBoard
+package com.example.homesupport.components.UserDashBoard
 
 sealed class Screen(val route: String) {
     object Home : Screen("user_dashboard")

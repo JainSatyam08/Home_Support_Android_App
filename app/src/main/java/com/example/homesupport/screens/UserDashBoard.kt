@@ -4,29 +4,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.homesupport.Components.UserDashBoard.BottomBar
-import com.example.homesupport.Components.UserDashBoard.DashboardHeader
-import com.example.homesupport.Components.UserDashBoard.LocationBar
 import com.example.homesupport.Components.UserDashBoard.ServiceGrid
-import com.example.homesupport.Components.UserDashBoard.ServiceSearchBar
-import com.example.homesupport.Components.UserDashBoard.SpecialFeatureCard
+import com.example.homesupport.components.UserDashBoard.BottomBar
+import com.example.homesupport.components.UserDashBoard.DashboardHeader
+import com.example.homesupport.components.UserDashBoard.LocationBar
+
+import com.example.homesupport.components.UserDashBoard.ServiceSearchBar
+import com.example.homesupport.components.UserDashBoard.SpecialFeatureCard
 import com.example.homesupport.location.getAddressFromLocation
 import com.example.homesupport.location.getCurrentLocation
 import com.example.homesupport.permission.LocationPermissionHandler
@@ -107,7 +101,7 @@ fun DashboardContent(
                 }
 
 
-                item{ServiceGrid()
+                item{ServiceGrid(navController = nav)
                     //Spacer(modifier = Modifier.height(12.dp))
                 }
 
@@ -127,37 +121,3 @@ fun DashboardContent(
     }
 }
 
-@Composable
-fun BottomNavigationBar(
-    selectedRoute: String,
-    onItemSelected: (String) -> Unit
-) {
-    NavigationBar(
-        containerColor = Color(0xFF0A1D56),
-        modifier = Modifier.height(80.dp)
-    ) {
-        val items = listOf(
-            BottomNavItem.Home,
-            BottomNavItem.History,
-            BottomNavItem.Feedback,
-            BottomNavItem.Category
-        )
-        items.forEach { item ->
-            NavigationBarItem(
-                selected = selectedRoute == item.route,
-                onClick = {
-                    onItemSelected(item.route)
-                },
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.label
-                    )
-                },
-                label = {
-                    Text(text = item.label)
-                }
-            )
-        }
-    }
-}

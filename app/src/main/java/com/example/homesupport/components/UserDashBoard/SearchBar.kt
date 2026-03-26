@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.UserDashBoard
+package com.example.homesupport.components.UserDashBoard
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

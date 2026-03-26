@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.Profile
+package com.example.homesupport.components.profile
 
 class Screen {
     sealed class Screen(val route: String) {
