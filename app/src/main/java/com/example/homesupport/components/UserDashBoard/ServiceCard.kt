@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.UserDashBoard
+package com.example.homesupport.components.UserDashBoard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.homesupport.R
+import android.net.Uri
 
 @Composable
 fun ServiceCard(
@@ -89,13 +90,16 @@ fun ServiceCard(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ServiceGrid(navController: NavHostController) {
+fun ServiceGrid(navController: NavHostController,
+                address: String) {
     // Dynamic routes matching NavGraph: service_detail/{serviceType}
+
+
     val services = listOf(
-        Triple("Plumbing", R.drawable.plumber, "service_detail/Plumbing"),
-        Triple("Electrical", R.drawable.electrician, "service_detail/Electrical"),
-        Triple("Cleaning", R.drawable.cleaning, "service_detail/Cleaning"),
-        Triple("Appliance", R.drawable.appliancecare, "service_detail/Appliance")
+        Pair("Plumbing", R.drawable.plumber),
+        Pair("Electrical", R.drawable.electrician),
+        Pair("Cleaning", R.drawable.cleaning),
+        Pair("Appliance", R.drawable.appliancecare)
     )
     
     Column(
@@ -116,9 +120,10 @@ fun ServiceGrid(navController: NavHostController) {
                         ServiceCard(
                             title = service.first,
                             imgRes = service.second,
-                            onClick = { 
-                                // Navigate using the dynamic route
-                                navController.navigate(service.third) 
+                            onClick = {
+                                navController.navigate(
+                                    "service_detail/${service.first}/${Uri.encode(address)}"
+                                )
                             }
                         )
                     }

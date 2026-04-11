@@ -23,9 +23,12 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun RequestToggle() {
+fun RequestToggle(
+    isActive: Boolean,
+    onToggleChange: (Boolean) -> Unit
+) {
 
-    var isActive by remember { mutableStateOf(true) }
+    //var isActive by remember { mutableStateOf(true) }
 
     Row(
         modifier = Modifier
@@ -44,9 +47,9 @@ fun RequestToggle() {
         Spacer(modifier = Modifier.width(10.dp))
 
         Switch(
-            checked = !isActive,
+            checked = isActive,
             onCheckedChange = {
-                isActive = !it
+                onToggleChange(it)
             },
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,

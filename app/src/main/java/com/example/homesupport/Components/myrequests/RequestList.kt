@@ -14,8 +14,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+
+// TODO: Yaha backend/API/DB se data fetch hoga
+// TODO: activeList = active requests (status != completed)
+// TODO: pastList = completed requests
+
+// TODO: Ye lists ViewModel se aayengi future me
+
+
 @Composable
-fun RequestList() {
+fun RequestList(isActive: Boolean) {
+
+    // 🔴 TEMP DATA (Backend ke jagah use ho raha hai)
+    val activeList = listOf(
+        RequestData(
+            title = "AC Repair",
+            isTrusted = true,
+            workerName = "Rahul K.",
+            statusText = "On the Way (15 mins)"
+        )
+    )
+
+    val pastList = listOf(
+        RequestData(
+            title = "Home Cleaning",
+            serviceId = "236 Repair",
+            serviceName = "Home Cleaning",
+            showBookAgain = true
+        ),
+        RequestData(
+            title = "Electrical Wiring",
+            serviceId = "235 Repair",
+            serviceName = "Vector Contour",
+            showBookAgain = true
+        )
+    )
+
+    // 🔴 Toggle ke hisaab se list select
+    val displayList = if (isActive) activeList else pastList
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -23,30 +59,8 @@ fun RequestList() {
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        items(3) {
-
-            val sample = listOf(
-                RequestData(
-                    title = "AC Repair",
-                    isTrusted = true,
-                    workerName = "Rahul K.",
-                    statusText = "On the Way (15 mins)"
-                ),
-                RequestData(
-                    title = "Home Cleaning",
-                    serviceId = "236 Repair",
-                    serviceName = "Home Cleaning",
-                    showBookAgain = true
-                ),
-                RequestData(
-                    title = "Electrical Wiring",
-                    serviceId = "235 Repair",
-                    serviceName = "Vector Contour",
-                    showBookAgain = true
-                )
-            )
-
-            RequestCard(sample[it])
+        items(displayList.size) { index ->
+            RequestCard(displayList[index])
         }
     }
 }

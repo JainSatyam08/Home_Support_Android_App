@@ -44,7 +44,7 @@ fun HeaderSection(
                 brush = Brush.horizontalGradient(
                     listOf(Color(0xFF1E88E5), Color(0xFF43A047))
                 ),
-                shape = RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp)
+                shape = RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp)
             )
             .padding(16.dp)
     ) {

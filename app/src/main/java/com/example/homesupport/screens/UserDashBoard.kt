@@ -14,7 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.homesupport.Components.UserDashBoard.ServiceGrid
+//import com.example.homesupport.components.UserDashBoard.ServiceGrid
+import com.example.homesupport.components.UserDashBoard.ServiceGrid
 import com.example.homesupport.components.UserDashBoard.BottomBar
 import com.example.homesupport.components.UserDashBoard.DashboardHeader
 import com.example.homesupport.components.UserDashBoard.LocationBar
@@ -89,7 +90,7 @@ fun DashboardContent(
             LazyColumn(
                 modifier = Modifier
                     //.fillMaxSize()
-                    .weight(1f)
+                    .weight(1.5f)
                     .offset(y = (-29).dp) // Reduced negative offset to move section down
                     .background(Color.White, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                     .padding(top = 25.dp) // Increased top padding to move search bar down

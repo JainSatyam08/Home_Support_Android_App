@@ -1,4 +1,4 @@
-package com.example.homesupport.Components.helpandsupport
+package com.example.homesupport.components.helpandsupport
 
 import android.content.Context
 import android.content.Intent
@@ -30,9 +30,9 @@ fun CallSupportDialog(
 ) {
 
     val numbers = listOf(
-        "9876543210",
-        "9123456780",
-        "9000011111"
+        "9760856091",
+        "8533936776",
+        "0989833023"
     )
 
     AlertDialog(
@@ -74,7 +74,7 @@ fun CallSupportDialog(
         }
     )
 }
-
+//@Composable
 fun openDialer(context: Context, number: String) {
     val intent = Intent(Intent.ACTION_DIAL).apply {
         data = Uri.parse("tel:$number")
