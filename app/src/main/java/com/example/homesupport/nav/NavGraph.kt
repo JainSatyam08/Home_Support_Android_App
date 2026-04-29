@@ -46,20 +46,14 @@ fun AppNavGraph(navController: NavHostController) {
 
         }
         composable(
-            route = "service_detail/{serviceType}/{address}",
-            arguments = listOf(
-                navArgument("serviceType") { type = NavType.StringType },
-                navArgument("address") { type = NavType.StringType }
-            )
-        ) { backStackEntry ->
+            route="new_request/{servicetype}",
+            arguments = listOf(navArgument("servicetype"){
+                type= NavType.StringType
+            })
+        ){ backStackEntry ->
+            val servicetype = backStackEntry.arguments?.getString("servicetype")
+            NewRequestScreen(navController,servicetype)
 
-            val type = backStackEntry.arguments?.getString("serviceType") ?: "Service"
-            val address = backStackEntry.arguments?.getString("address") ?: ""
-
-            NewRequestScreen(
-                serviceName = type,
-                address = address
-            )
         }
 
         // NEW REQUEST ROUTE

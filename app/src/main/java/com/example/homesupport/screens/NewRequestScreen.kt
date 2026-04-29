@@ -1,175 +1,134 @@
 package com.example.homesupport.screens
 
-
-import android.preference.PreferenceActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.R
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.homesupport.components.UserDashBoard.LocationBar
-import com.example.homesupport.components.newrequest.HeaderSection
-import com.example.homesupport.components.newrequest.LocationCard
-import com.example.homesupport.components.newrequest.ServiceDetailField
+import com.example.homesupport.components.UserDashBoard.BottomBar
+import com.example.homesupport.components.UserDashBoard.LocationBar   // ← your existing one
+import com.example.homesupport.components.newrequest.*
+import com.example.homesupport.location.getAddressFromLocation
+import com.example.homesupport.location.getCurrentLocation
+import com.example.homesupport.permission.LocationPermissionHandler
 
-data class ServiceOption(
-    val title: String,
-    val imageRes: Int // drawable resource
-)
 
-val plumberOptions = listOf(
-    ServiceOption("Leaky Faucet Repair", R.drawable.bathroom),
-    ServiceOption("Blocked Drain", R.drawable.plumber2),
-    ServiceOption("Pipe Installation", R.drawable.plumber3),
-    ServiceOption("Water Heater Service", R.drawable.plumber4)
-)
-val electricianOptions = listOf(
-    ServiceOption("Leaky Faucet Repair", R.drawable.bathroom),
-    ServiceOption("Blocked Drain", R.drawable.plumber2),
-    ServiceOption("Pipe Installation", R.drawable.plumber3),
-    ServiceOption("Water Heater Service", R.drawable.plumber4)
-)
-val cleaningOptions = listOf(
-    ServiceOption("Leaky Faucet Repair", R.drawable.bathroom),
-    ServiceOption("Blocked Drain", R.drawable.plumber2),
-    ServiceOption("Pipe Installation", R.drawable.plumber3),
-    ServiceOption("Water Heater Service", R.drawable.plumber4)
-)
-val applianceOptions = listOf(
-    ServiceOption("Leaky Faucet Repair", R.drawable.bathroom),
-    ServiceOption("Blocked Drain", R.drawable.plumber2),
-    ServiceOption("Pipe Installation", R.drawable.plumber3),
-    ServiceOption("Water Heater Service", R.drawable.plumber4)
-)
 
 @Composable
-fun NewRequestScreen(serviceName: String,
-                     address: String) {
-
-    val serviceTitle: String
-    //val serviceIcon: ImageVector
-    val optionsList: List<ServiceOption>
-
-    when (serviceName.lowercase()) {
-
-        "plumber" -> {
-            serviceTitle = "Plumber Service"
-            //serviceIcon = Icons.Default.Build
-            optionsList = plumberOptions
-        }
-
-        "electrician" -> {
-            serviceTitle = "Electrician Service"
-            //serviceIcon = Icons.Default.ElectricalServices
-            optionsList = electricianOptions
-        }
-
-        "cleaning" -> {
-            serviceTitle = "Home Cleaning"
-            //serviceIcon = Icons.Default.CleaningServices
-            optionsList = cleaningOptions
-        }
-
-        "appliance" -> {
-            serviceTitle = "Appliance Repair"
-            //serviceIcon = Icons.Default.Kitchen
-            optionsList = applianceOptions
-        }
-
-        else -> {
-            serviceTitle = "Service"
-            //serviceIcon = Icons.Default.Build
-            optionsList = emptyList()
-        }
-    }
-
-    // 🔥 YAHAN TERA MAIN SCREEN CALL HOGA
-    RequestServiceScreen(
-        serviceTitle = serviceTitle,
-        optionsList = optionsList,
-        address = address
-    )
+fun NewRequestScreen(nav: NavHostController, serviceType: String?) {
+    RequestContent(nav = nav, modifier = Modifier,serviceType)
 }
 @Composable
-fun RequestServiceScreen(
-    serviceTitle: String,
-    optionsList: List<ServiceOption>,
-    address: String
-) {
+fun RequestContent(nav: NavHostController,
+                     modifier: Modifier,
+                   serviceType: String?) {
 
-    var selectedOption by remember { mutableStateOf<ServiceOption?>(null) }
+    var permissionGranted by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var address by remember { mutableStateOf("Fetching location...") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF5F7F6))
-    ) {
 
-        // 🔹 HEADER
-        HeaderSection(
-            title = serviceTitle
-        )
+    Box(modifier = modifier.fillMaxSize()) {
+        // 1. Dashboard Header at the top layer background
+        Header(serviceType=serviceType)
 
-        // 🔹 LOCATION CARD (address pass kar)
-        LocationCard(address = address)
-
+        // 2. Main content Column
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(top = 70.dp) // Adjust based on header height
         ) {
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // 🔹 FORM SECTION
-            ServiceDetailField()
-            Spacer(modifier = Modifier.height(10.dp))
-
-            ProblemDescriptionField()
-            Spacer(modifier = Modifier.height(10.dp))
-
-            MediaUploadField()
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // 🔹 GRID
-            ServiceGrid(
-                options = optionsList,
-                selectedOption = selectedOption,
-                onOptionClick = {
-                    selectedOption = it
+            // Location Permission logic (Invisible)
+            LocationPermissionHandler {
+                permissionGranted = true
+                getCurrentLocation(context) { location ->
+                    location?.let {
+                        address = getAddressFromLocation(
+                            context,
+                            it.latitude,
+                            it.longitude
+                        )
+                    }
                 }
-            )
+            }
 
-            Spacer(modifier = Modifier.weight(1f))
-
-            // 🔹 BUTTON
-            ProceedButton(
-                onClick = {
-                    // yaha backend ya next screen
+            // Location Bar - Spans full width
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                if (permissionGranted) {
+                    LocationBar(address)
+                } else {
+                    Text(
+                        text = "Location permission required",
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(bottom = 16.dp)
+                    )
                 }
-            )
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(10.dp)) // Added space after LocationBar
+
+            // The rest of the content with white background starting here
+            LazyColumn(
+                modifier = Modifier
+                    //.fillMaxSize()
+                    .weight(1f)
+                    .offset(y = (-29).dp) // Reduced negative offset to move section down
+                    .background(Color.White, shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                    .padding(top = 25.dp, start = 16.dp, end = 16.dp) // Increased top padding to move search bar down
+            ) {
+                item {
+                    Text(
+                        text = "Service Details",
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        color = Color(0xFF1A1A1A)
+
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+                //Spacer(50.dp)
+
+                // 3b. Problem Description field
+                item {
+                    InputBox(placeholder = "Problem Description")
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                // 3c. Photos / Video row
+                item {
+                    PhotosVideoRow(onAddPhoto = { /* TODO: launch picker */ })
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                // 3d. Appliance category grid
+                item {
+                    ApplianceGrid(serviceType=serviceType)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+
+                // 3e. Proceed button
+                item {
+                    ProceedButton(onClick = { /* TODO: navigate */ })
+                }
+            }
+
+            BottomBar(navController = nav)
+
         }
     }
 }
+

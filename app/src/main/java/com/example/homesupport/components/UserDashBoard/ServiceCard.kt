@@ -90,8 +90,7 @@ fun ServiceCard(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ServiceGrid(navController: NavHostController,
-                address: String) {
+fun ServiceGrid(navController: NavHostController) {
     // Dynamic routes matching NavGraph: service_detail/{serviceType}
 
 
@@ -122,7 +121,7 @@ fun ServiceGrid(navController: NavHostController,
                             imgRes = service.second,
                             onClick = {
                                 navController.navigate(
-                                    "service_detail/${service.first}/${Uri.encode(address)}"
+                                    "new_request/${service.first}"
                                 )
                             }
                         )
