@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 /**
  * Full-width CTA button at the bottom of the request form.
@@ -18,11 +19,15 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun ProceedButton(
-    onClick: () -> Unit,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            navController.navigate(
+                "schedulescreen"
+            )
+        },
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp),

@@ -122,7 +122,7 @@ fun RequestContent(nav: NavHostController,
 
                 // 3e. Proceed button
                 item {
-                    ProceedButton(onClick = { /* TODO: navigate */ })
+                    ProceedButton(navController = nav)
                 }
             }
 

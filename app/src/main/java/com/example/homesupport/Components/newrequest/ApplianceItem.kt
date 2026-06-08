@@ -2,7 +2,7 @@ package com.example.homesupport.components.newrequest
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -11,15 +11,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+
 import androidx.compose.ui.unit.dp
 import com.example.homesupport.R
-import androidx.compose.ui.unit.sp
+
 import com.example.homesupport.screens.BottomNavItem.Category.label
 
 // ── Data model ────────────────────────────────────────────────────────────────
@@ -138,8 +138,5 @@ fun ApplianceItem(
                 modifier = Modifier.fillMaxSize()
             )
         }
-
-
-
     }
 }

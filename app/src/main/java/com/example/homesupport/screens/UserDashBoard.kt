@@ -114,11 +114,11 @@ fun DashboardContent(
                                     // Navigate or open screen
                                 }
                 )}
+                item{
+                    //Spacer(modifier = Modifier.height(12.dp))
+                }
             }
-
             BottomBar(navController = nav)
-
         }
     }
 }
-

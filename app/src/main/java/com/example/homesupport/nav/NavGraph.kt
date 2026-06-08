@@ -14,6 +14,7 @@ import com.example.homesupport.screens.LoginScreen
 
 import com.example.homesupport.screens.NewRequestScreen
 import com.example.homesupport.screens.ProfileScreen
+import com.example.homesupport.screens.ScheduleServiceScreen
 import com.example.homesupport.screens.SplashScreen
 import com.example.homesupport.screens.TrackRequestScreen
 import com.example.homesupport.screens.UserDashboard
@@ -54,6 +55,10 @@ fun AppNavGraph(navController: NavHostController) {
             val servicetype = backStackEntry.arguments?.getString("servicetype")
             NewRequestScreen(navController,servicetype)
 
+        }
+
+        composable ("schedulescreen"){
+            ScheduleServiceScreen(navController)
         }
 
         // NEW REQUEST ROUTE
