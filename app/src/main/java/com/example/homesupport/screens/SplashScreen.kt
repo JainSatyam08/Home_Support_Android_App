@@ -42,7 +42,7 @@ fun SplashScreen(nav: NavHostController){
 
         delay(1000)
 
-        nav.navigate("user_dashboard") {
+        nav.navigate("login") {
             popUpTo("splash") {
                 inclusive = true
             }

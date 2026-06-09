@@ -1,5 +1,7 @@
 package com.example.homesupport.screens
 
+import  androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.homesupport.viewmodel.LoginViewModel
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,11 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
+
 @Composable
 fun LoginScreen(nav: NavHostController) {
+
+    val loginViewModel: LoginViewModel = viewModel()
+
     var phone by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var error by remember { mutableStateOf("") }
+    
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,9 +71,9 @@ fun LoginScreen(nav: NavHostController) {
         Spacer(Modifier.height(20.dp))
 
         // AGAR KOI ERROR MESSAGE HAI TOH DIKHAYEGA
-        if (error.isNotEmpty()) {
+        if (loginViewModel.error.isNotEmpty()) {
             Text(
-                error,
+                    loginViewModel.error,
                 color = Color.Red,
                 fontSize = 14.sp
             )
@@ -74,11 +81,8 @@ fun LoginScreen(nav: NavHostController) {
         }
         Button(
             onClick = {
-                if(phone.isEmpty() || password.isEmpty()){
-                    error="Please fill all fields"
-                }
-                else{
-                    error=""
+                loginViewModel.validatelogin(phone,password)
+                if(loginViewModel.error.isEmpty()){
                     nav.navigate("user_dashboard")
                 }
 
