@@ -1,7 +1,13 @@
 package com.example.homesupport.components.UserDashBoard
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -30,7 +36,7 @@ fun LocationBar(
                 color = Color(0xFF4CAF84),
                 shape = RoundedCornerShape(topStart = 14.dp, topEnd = 14.dp)
             )
-            .padding(horizontal = 16.dp, vertical = 24.dp), // Increased vertical padding for more height
+            .padding(horizontal = 16.dp, vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -45,17 +51,10 @@ fun LocationBar(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            /*Text(
-                text = "Your Location",
-                color = Color.Gray,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold
-            )*/
             Text(
                 text = address,
                 color = Color.Black,
                 fontSize = 11.sp,
-                //maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }

@@ -15,16 +15,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.homesupport.components.UserDashBoard.ServiceSearchBar
 import com.example.homesupport.components.helpandsupport.CallSupportDialog
-
-
 import com.example.homesupport.components.helpandsupport.ContactSection
 import com.example.homesupport.components.helpandsupport.FAQSection
-import com.example.homesupport.components.helpandsupport.openDialer
 import com.example.homesupport.components.helpandsupport.HeaderSection
 import com.example.homesupport.components.helpandsupport.SearchBar
-import com.example.homesupport.components.profile.HeaderSection
+import com.example.homesupport.components.helpandsupport.openDialer
 
 @Composable
 fun HelpSupportScreen(navController: NavHostController) {

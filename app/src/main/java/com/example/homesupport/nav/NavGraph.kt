@@ -1,7 +1,7 @@
 package com.example.homesupport.nav
 
-import android.R.attr.type
-import com.example.homesupport.screens.MyRequests
+
+
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -9,18 +9,25 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.homesupport.screens.BookingConfirmedScreen
+
+
 import com.example.homesupport.screens.HelpSupportScreen
 import com.example.homesupport.screens.LoginScreen
-
+import com.example.homesupport.screens.MyRequests
 import com.example.homesupport.screens.NewRequestScreen
 import com.example.homesupport.screens.ProfileScreen
 import com.example.homesupport.screens.ScheduleServiceScreen
+
 import com.example.homesupport.screens.SplashScreen
 import com.example.homesupport.screens.TrackRequestScreen
 import com.example.homesupport.screens.UserDashboard
+import com.example.homesupport.viewmodel.BookingViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(navController: NavHostController,
+                bookingViewModel: BookingViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = "splash"
@@ -53,12 +60,16 @@ fun AppNavGraph(navController: NavHostController) {
             })
         ){ backStackEntry ->
             val servicetype = backStackEntry.arguments?.getString("servicetype")
-            NewRequestScreen(navController,servicetype)
+            NewRequestScreen(navController,servicetype,bookingViewModel)
 
         }
 
         composable ("schedulescreen"){
-            ScheduleServiceScreen(navController)
+            ScheduleServiceScreen(navController,bookingViewModel)
+        }
+
+        composable ("confirmbooking"){
+            BookingConfirmedScreen(navController,bookingViewModel)
         }
 
         // NEW REQUEST ROUTE
@@ -70,6 +81,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable("track_request") {
             TrackRequestScreen(navController)
         }
+
     }
 }
 

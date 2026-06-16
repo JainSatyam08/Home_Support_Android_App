@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.homesupport.components.UserDashBoard.BottomBar
 import com.example.homesupport.components.UserDashBoard.LocationBar   // ← your existing one
@@ -20,21 +21,30 @@ import com.example.homesupport.components.newrequest.*
 import com.example.homesupport.location.getAddressFromLocation
 import com.example.homesupport.location.getCurrentLocation
 import com.example.homesupport.permission.LocationPermissionHandler
-
+import com.example.homesupport.viewmodel.BookingViewModel
 
 
 @Composable
-fun NewRequestScreen(nav: NavHostController, serviceType: String?) {
-    RequestContent(nav = nav, modifier = Modifier,serviceType)
+fun NewRequestScreen(nav: NavHostController, serviceType: String?,
+                     bookingViewModel: BookingViewModel) {
+    //val bookingViewModel: BookingViewModel = viewModel()
+    LaunchedEffect(serviceType) {
+        bookingViewModel.updateServiceType(serviceType ?: "")
+    }
+    RequestContent(nav = nav, modifier = Modifier,serviceType,bookingViewModel=bookingViewModel)
 }
 @Composable
 fun RequestContent(nav: NavHostController,
                      modifier: Modifier,
-                   serviceType: String?) {
+                   serviceType: String?,
+                   bookingViewModel: BookingViewModel) {
+
+    //val bookingViewModel: BookingViewModel = viewModel()
 
     var permissionGranted by remember { mutableStateOf(false) }
     val context = LocalContext.current
     var address by remember { mutableStateOf("Fetching location...") }
+
 
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -104,7 +114,8 @@ fun RequestContent(nav: NavHostController,
 
                 // 3b. Problem Description field
                 item {
-                    InputBox(placeholder = "Problem Description")
+                    InputBox(placeholder = "Problem Description",
+                        bookingViewModel=bookingViewModel)
                     Spacer(modifier = Modifier.height(12.dp))
                 }
 
@@ -116,7 +127,8 @@ fun RequestContent(nav: NavHostController,
 
                 // 3d. Appliance category grid
                 item {
-                    ApplianceGrid(serviceType=serviceType)
+                    ApplianceGrid(
+                        bookingViewModel=bookingViewModel)
                     Spacer(modifier = Modifier.height(12.dp))
                 }
 

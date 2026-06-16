@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.example.homesupport.R
 
 import com.example.homesupport.screens.BottomNavItem.Category.label
+import com.example.homesupport.viewmodel.BookingViewModel
 
 // ── Data model ────────────────────────────────────────────────────────────────
 private data class ApplianceOption(
@@ -48,12 +49,12 @@ private object ApplianceItemColors {
  * "Washing Machine" is pre-selected to match the design.
  */
 @Composable
-fun ApplianceGrid(modifier: Modifier = Modifier,serviceType:String?) {
+fun ApplianceGrid(modifier: Modifier = Modifier,
+                  bookingViewModel: BookingViewModel
+) {
 
-    var selectedId by remember { mutableStateOf("") }
 
-        // YEH when block tune khud likhna hai
-        val options = when(serviceType) {
+        val options = when(bookingViewModel.serviceType) {
             "Appliance" -> listOf(
                 ApplianceOption("wm",R.drawable.washingmachine),
                 ApplianceOption("fridge",R.drawable.fridge),
@@ -78,7 +79,7 @@ fun ApplianceGrid(modifier: Modifier = Modifier,serviceType:String?) {
                 ApplianceOption("tap",R.drawable.lighting),
                 ApplianceOption("drain",R.drawable.socketinstall),
                 ApplianceOption("heater",R.drawable.wiringrepair)
-                // tu khud dal
+
             )
             else -> emptyList()
         }
@@ -96,8 +97,8 @@ fun ApplianceGrid(modifier: Modifier = Modifier,serviceType:String?) {
             ApplianceItem(
                 //label      = option.label,
                 imgRes      = option.imgRes,
-                isSelected = selectedId == option.id,
-                onClick    = { selectedId = option.id }
+                isSelected = bookingViewModel.problemType == option.id,
+                onClick    = { bookingViewModel.updateProblemType(option.id) }
             )
         }
     }

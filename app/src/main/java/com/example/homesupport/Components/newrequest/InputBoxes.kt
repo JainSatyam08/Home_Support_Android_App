@@ -13,7 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.homesupport.components.newrequest.NewRequestColors
+import com.example.homesupport.viewmodel.BookingViewModel
+
 /**
  * Multi-line outlined text field for entering a problem description.
  * Holds its own state internally — lift state up if needed.
@@ -24,13 +27,15 @@ import com.example.homesupport.components.newrequest.NewRequestColors
 @Composable
 fun InputBox(
     placeholder: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bookingViewModel: BookingViewModel
 ) {
-    var text by remember { mutableStateOf("") }
+    //var text by remember { mutableStateOf("") }
+        //val bookingViewModel: BookingViewModel= viewModel()
 
     OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
+        value = bookingViewModel.problemDescription,
+        onValueChange = { bookingViewModel.updateProblemDescription(it) },
         placeholder = {
             Text(
                 text = placeholder,
