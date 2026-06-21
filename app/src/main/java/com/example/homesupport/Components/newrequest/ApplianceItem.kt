@@ -56,29 +56,29 @@ fun ApplianceGrid(modifier: Modifier = Modifier,
 
         val options = when(bookingViewModel.serviceType) {
             "Appliance" -> listOf(
-                ApplianceOption("wm",R.drawable.washingmachine),
-                ApplianceOption("fridge",R.drawable.fridge),
-                ApplianceOption("micro",R.drawable.microwave),
-                ApplianceOption("ac",R.drawable.acservice)
+                ApplianceOption("Washing Machine",R.drawable.washingmachine),
+                ApplianceOption("Refrigerator",R.drawable.fridge),
+                ApplianceOption("Microwave",R.drawable.microwave),
+                ApplianceOption("Air  Conditioner",R.drawable.acservice)
             )
             "Plumbing" -> listOf(
-                ApplianceOption("pipe",R.drawable.leakyfaucet),
-                ApplianceOption("tap",R.drawable.blockeddrain),
-                ApplianceOption("drain",R.drawable.pipeinstall),
-                ApplianceOption("heater",R.drawable.waterheater)
+                ApplianceOption("Tap Leakage",R.drawable.leakyfaucet),
+                ApplianceOption("Blocked Drainage",R.drawable.blockeddrain),
+                ApplianceOption("New Pipe Installation",R.drawable.pipeinstall),
+                ApplianceOption("Water Heater",R.drawable.waterheater)
             )
             "Cleaning" -> listOf(
-                ApplianceOption("pipe",R.drawable.deepsanitized),
-                ApplianceOption("tap",R.drawable.standardcleaning),
-                ApplianceOption("drain",R.drawable.kitchencleaning),
-                ApplianceOption("heater",R.drawable.bathroom)
-                // tu khud dal apne drawables ke hisaab se
+                ApplianceOption("Sanitization & Pest Control",R.drawable.deepsanitized),
+                ApplianceOption("Standard House Cleaning",R.drawable.standardcleaning),
+                ApplianceOption("Kitchen Cleaning",R.drawable.kitchencleaning),
+                ApplianceOption("Bathroom Cleaning",R.drawable.bathroom)
+
             )
             "Electrical" -> listOf(
-                ApplianceOption("pipe",R.drawable.mcbswitch),
-                ApplianceOption("tap",R.drawable.lighting),
-                ApplianceOption("drain",R.drawable.socketinstall),
-                ApplianceOption("heater",R.drawable.wiringrepair)
+                ApplianceOption("Switch/MCB Replacement",R.drawable.mcbswitch),
+                ApplianceOption("Lighting",R.drawable.lighting),
+                ApplianceOption("Installation Sockets/Switch",R.drawable.socketinstall),
+                ApplianceOption("Wiring Repair/New Installation",R.drawable.wiringrepair)
 
             )
             else -> emptyList()

@@ -11,3 +11,10 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val RoyalBlue = Color(0xFF0A1D56)
+
+val DarkBlue    = Color(0xFF1A3A6B)
+val BrandGreen  = Color(0xFF3A7D44)
+val LinkBlue    = Color(0xFF1E5FA8)
+val InputBorder = Color(0xFFB0BEC5)
+val HintGray    = Color(0xFF9E9E9E)
+

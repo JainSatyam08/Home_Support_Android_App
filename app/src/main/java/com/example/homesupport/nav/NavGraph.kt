@@ -13,11 +13,13 @@ import com.example.homesupport.screens.BookingConfirmedScreen
 
 
 import com.example.homesupport.screens.HelpSupportScreen
-import com.example.homesupport.screens.LoginScreen
+
 import com.example.homesupport.screens.MyRequests
 import com.example.homesupport.screens.NewRequestScreen
 import com.example.homesupport.screens.ProfileScreen
 import com.example.homesupport.screens.ScheduleServiceScreen
+import com.example.homesupport.screens.SignInScreen
+import com.example.homesupport.screens.SignUpScreen
 
 import com.example.homesupport.screens.SplashScreen
 import com.example.homesupport.screens.TrackRequestScreen
@@ -36,7 +38,10 @@ fun AppNavGraph(navController: NavHostController,
             SplashScreen(navController)
         }
         composable("login"){
-            LoginScreen(navController)
+            SignInScreen(navController)
+        }
+        composable("signup"){
+            SignUpScreen(navController)
         }
         composable("user_dashboard") {
             UserDashboard(navController)
