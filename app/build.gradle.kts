@@ -61,6 +61,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.8.7")
 
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     // Location aur Permissions
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")

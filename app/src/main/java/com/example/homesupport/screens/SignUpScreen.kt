@@ -28,13 +28,14 @@ import com.example.homesupport.components.signin.PasswordField
 import com.example.homesupport.components.signin.RegisterButton
 import com.example.homesupport.components.signin.SignUpSubtitle
 import com.example.homesupport.components.signin.SignUpTitle
-
 import com.example.homesupport.viewmodel.LoginViewModel
+
+import com.example.homesupport.viewmodel.SignupViewModel
 
 @Composable
 fun SignUpScreen(nav: NavHostController) {
 
-    val loginViewModel: LoginViewModel = viewModel()
+    val signupViewModel: SignupViewModel = viewModel()
     val scrollState = rememberScrollState()
 
     Column(
@@ -61,9 +62,9 @@ fun SignUpScreen(nav: NavHostController) {
         Spacer(modifier = Modifier.height(28.dp))
 
         AuthInputField(
-            value          = loginViewModel.fullname,
+            value          = signupViewModel.fullname,
             onValueChange  = {
-                loginViewModel.updatefullname(it) 
+                signupViewModel.updatefullname(it)
             },
             placeholder    = "Full Name",
             leadingIcon    = Icons.Outlined.Person,
@@ -74,9 +75,9 @@ fun SignUpScreen(nav: NavHostController) {
         Spacer(modifier = Modifier.height(14.dp))
 
         AuthInputField(
-            value          = loginViewModel.email,
+            value          = signupViewModel.email,
             onValueChange  = {
-                loginViewModel.updateemail(it)
+                signupViewModel.updateemail(it)
             },
             placeholder    = "Email Address",
             leadingIcon    = Icons.Outlined.Email,
@@ -87,9 +88,9 @@ fun SignUpScreen(nav: NavHostController) {
         Spacer(modifier = Modifier.height(14.dp))
 
         AuthInputField(
-            value          = loginViewModel.phone,
+            value          = signupViewModel.phone,
             onValueChange  = {
-                loginViewModel.updatephone(it)
+                signupViewModel.updatephone(it)
             },
             placeholder    = "Phone Number",
             leadingIcon    = Icons.Outlined.Phone,
@@ -100,9 +101,9 @@ fun SignUpScreen(nav: NavHostController) {
         Spacer(modifier = Modifier.height(14.dp))
 
         PasswordField(
-            value          = loginViewModel.password,
+            value          = signupViewModel.password,
             onValueChange  = {
-                loginViewModel.updatepassword(it)
+                signupViewModel.updatepassword(it)
             },
             placeholder    = "Password"
         )
@@ -110,26 +111,27 @@ fun SignUpScreen(nav: NavHostController) {
         Spacer(modifier = Modifier.height(14.dp))
 
         PasswordField(
-            value          = loginViewModel.confirmpassword,
+            value          = signupViewModel.confirmpassword,
             onValueChange  = {
-                loginViewModel.updateconfirmpassword(it)
+                signupViewModel.updateconfirmpassword(it)
             },
             placeholder    = "Confirm Password"
         )
 
         Spacer(modifier = Modifier.height(28.dp))
-        if (loginViewModel.error.isNotEmpty()) {
+        if (signupViewModel.error.isNotEmpty()) {
             Text(
-                text = loginViewModel.error,
+                text = signupViewModel.error,
                 color = Color.Red
             )
         }
 
         RegisterButton(
             onClick = {
-                loginViewModel.validatesignup()
-                if (loginViewModel.error.isEmpty()) {
-                    nav.navigate("login")
+                signupViewModel.validatesignup()
+                if (signupViewModel.error.isEmpty()) {
+                    signupViewModel.signup()
+                     //nav.navigate("login")
                 }
             }
         )
