@@ -35,6 +35,9 @@ import com.example.homesupport.viewmodel.SignupViewModel
 @Composable
 fun SignUpScreen(nav: NavHostController) {
 
+    /* SignupViewModel is a name of a class in the above line we are making its object(instance)
+	 i.e. signupViewModel is a object or instance name.  */
+
     val signupViewModel: SignupViewModel = viewModel()
     val scrollState = rememberScrollState()
 

@@ -81,10 +81,6 @@ class SignupViewModel : ViewModel() {
 
                 )
                 val response = repository.signup(request)
-                android.util.Log.d("HTTP", "Code = ${response.code()}")
-                android.util.Log.d("HTTP", "Message = ${response.body()?.message}")
-                android.util.Log.d("HTTP", "Message = ${response.body()?.message}")
-                android.util.Log.d("HTTP", "Error = ${response.errorBody()?.string()}")
                 if (response.isSuccessful) {
                     error = response.body()?.message ?:"Signup Success"
 
