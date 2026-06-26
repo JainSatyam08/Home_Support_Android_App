@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +30,20 @@ import com.example.homesupport.viewmodel.LoginViewModel
 fun SignInScreen(nav: NavHostController
 
 ) {
+
     val loginViewModel: LoginViewModel = viewModel()
+    LaunchedEffect(loginViewModel.loginSuccess) {
+        if(loginViewModel.loginSuccess){
+            nav.navigate("user_dashboard"){
+                popUpTo("login"){
+                    inclusive = true
+                }
+            }
+
+        }
+
+
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()                      // Poori screen cover karo
@@ -54,12 +68,6 @@ fun SignInScreen(nav: NavHostController
             value = loginViewModel.email,                      // Current value dikhao
             onValueChange = { loginViewModel.updateemail(it) }      // User type kare toh state update karo
         )
-        if (loginViewModel.error.isNotEmpty()) {
-            Text(
-                text = loginViewModel.error,
-                color = Color.Red
-            )
-        }
 
         Spacer(modifier = Modifier.height(14.dp)) // Email aur password field ke beech gap
 
@@ -91,7 +99,7 @@ fun SignInScreen(nav: NavHostController
             onClick = {
                 loginViewModel.validatelogin()
                 if (loginViewModel.error.isEmpty()) {
-                    nav.navigate("user_dashboard")
+                    loginViewModel.login()
                 }
             }
         )

@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.core.text.trimmedLength
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.homesupport.dto.ApiResponse
 import com.example.homesupport.dto.SignupRequest
 import kotlinx.coroutines.launch
 import com.example.homesupport.repository.AuthRepository
+import com.google.gson.Gson
 
 class SignupViewModel : ViewModel() {
     private val repository = AuthRepository()
@@ -89,7 +91,10 @@ class SignupViewModel : ViewModel() {
                     signupsucces = true
 
                 } else {
-                    error = response.errorBody()?.string() ?:"Signup Failed"
+
+                    val errorJson = response.errorBody()?.string()
+                    val apiError = Gson().fromJson(errorJson, ApiResponse::class.java)
+                    error = apiError.message
 
                 }
 

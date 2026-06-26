@@ -12,7 +12,7 @@ class AuthRepository {
     suspend fun signup(request: SignupRequest): Response<ApiResponse> {
         return RetrofitInstance.api.signup(request)
     }
-    suspend fun login(request: LoginRequest): Response<String> {
+    suspend fun login(request: LoginRequest): Response<ApiResponse> {
         return RetrofitInstance.api.login(request)
     }
 

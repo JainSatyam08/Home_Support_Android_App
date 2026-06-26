@@ -7,40 +7,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.text.trimmedLength
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.homesupport.dto.ApiResponse
+import com.example.homesupport.dto.LoginRequest
+import com.example.homesupport.repository.AuthRepository
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
-    var error by mutableStateOf("")
+
+    private val repository = AuthRepository()
+
+    var loginSuccess by mutableStateOf(false)
         private set
 
-
+    var error by mutableStateOf("")
+        private set
 
     var password by mutableStateOf("")
         private set
 
-
     var email by mutableStateOf("")
         private set
-
-
-
-
-
     fun updateemail(email: String){
         this.email = email
     }
-
-
-
-
-
-
-
-
     fun updatepassword(password:String){
         this.password = password
     }
-
-
     fun validatelogin(/*phone: String, password: String*/) { //because viewmodel mai hi parameter hai baar baar lene ki zarurat nhi hai}
 
         if(email.isEmpty() || password.isEmpty()){
@@ -48,6 +42,36 @@ class LoginViewModel : ViewModel() {
         }
         else{
             error = ""
+        }
+    }
+    fun login(){
+        viewModelScope.launch {
+            try{
+                val request= LoginRequest(
+                    email=email,
+                    password=password
+                )
+                val response = repository.login(request)
+
+                if(response.isSuccessful){
+                    error = response.body()?.message ?: "Login Successful"
+                    loginSuccess = true
+                }
+                else{
+                    val errorJson = response.errorBody()?.string()
+
+                    val apiError = Gson().fromJson(
+                        errorJson,
+                        ApiResponse::class.java
+                    )
+
+                    error = apiError.message
+                }
+
+            }
+            catch (e: Exception){
+                error = "Network Error: ${e.message}"
+            }
         }
     }
 

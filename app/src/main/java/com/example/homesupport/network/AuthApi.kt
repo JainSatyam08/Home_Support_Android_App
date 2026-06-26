@@ -16,6 +16,6 @@ interface AuthApi {
     @POST("api/users/login")
     suspend fun login(
         @Body request: LoginRequest
-    ): Response<String>
+    ): Response<ApiResponse>
 
 }
