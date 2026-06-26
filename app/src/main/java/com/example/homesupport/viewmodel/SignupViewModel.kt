@@ -15,6 +15,9 @@ class SignupViewModel : ViewModel() {
     var error by mutableStateOf("")
         private set
 
+    var signupsucces by mutableStateOf(false)
+        private set
+
     var phone by mutableStateOf("")
         private set
 
@@ -83,6 +86,7 @@ class SignupViewModel : ViewModel() {
                 val response = repository.signup(request)
                 if (response.isSuccessful) {
                     error = response.body()?.message ?:"Signup Success"
+                    signupsucces = true
 
                 } else {
                     error = response.errorBody()?.string() ?:"Signup Failed"

@@ -11,15 +11,12 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Text
-
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-
 import androidx.compose.ui.unit.dp
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.homesupport.components.signin.AlreadyHaveAccountPrompt
@@ -28,8 +25,6 @@ import com.example.homesupport.components.signin.PasswordField
 import com.example.homesupport.components.signin.RegisterButton
 import com.example.homesupport.components.signin.SignUpSubtitle
 import com.example.homesupport.components.signin.SignUpTitle
-import com.example.homesupport.viewmodel.LoginViewModel
-
 import com.example.homesupport.viewmodel.SignupViewModel
 
 @Composable
@@ -39,6 +34,13 @@ fun SignUpScreen(nav: NavHostController) {
 	 i.e. signupViewModel is a object or instance name.  */
 
     val signupViewModel: SignupViewModel = viewModel()
+
+    LaunchedEffect(signupViewModel.signupsucces) {
+        if(signupViewModel.signupsucces){
+            nav.popBackStack()
+            nav.navigate("login")
+        }
+    }
     val scrollState = rememberScrollState()
 
     Column(
