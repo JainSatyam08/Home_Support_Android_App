@@ -54,7 +54,8 @@ class LoginViewModel : ViewModel() {
                 val response = repository.login(request)
 
                 if(response.isSuccessful){
-                    error = response.body()?.message ?: "Login Successful"
+                    val token=response.body()?.token
+                    android.util.Log.d("JWT",token?:"No Token")
                     loginSuccess = true
                 }
                 else{

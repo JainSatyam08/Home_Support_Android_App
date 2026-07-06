@@ -21,7 +21,7 @@ class SignupViewModel : ViewModel() {
         private set
 
     var phone by mutableStateOf("")
-        private set
+    private set
 
     var password by mutableStateOf("")
         private set

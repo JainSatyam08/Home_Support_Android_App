@@ -3,6 +3,7 @@ package com.example.homesupport.network
 
 import com.example.homesupport.dto.ApiResponse
 import com.example.homesupport.dto.LoginRequest
+import com.example.homesupport.dto.LoginResponse
 import com.example.homesupport.dto.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -16,6 +17,6 @@ interface AuthApi {
     @POST("api/users/login")
     suspend fun login(
         @Body request: LoginRequest
-    ): Response<ApiResponse>
+    ): Response<LoginResponse>
 
 }
