@@ -24,14 +24,14 @@ import com.example.homesupport.components.signin.SignInTitle
 import com.example.homesupport.components.signin.SignUpPrompt
 import com.example.homesupport.components.signin.SocialLoginRow
 import com.example.homesupport.viewmodel.LoginViewModel
-
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun SignInScreen(nav: NavHostController
 
 ) {
 
-    val loginViewModel: LoginViewModel = viewModel()
+    val loginViewModel: LoginViewModel = hiltViewModel()
     LaunchedEffect(loginViewModel.loginSuccess) {
         if(loginViewModel.loginSuccess){
             nav.navigate("user_dashboard"){

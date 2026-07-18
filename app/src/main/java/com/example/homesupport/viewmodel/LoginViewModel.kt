@@ -12,11 +12,15 @@ import com.example.homesupport.dto.ApiResponse
 import com.example.homesupport.dto.LoginRequest
 import com.example.homesupport.repository.AuthRepository
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.launch
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : ViewModel() {
 
-class LoginViewModel : ViewModel() {
-
-    private val repository = AuthRepository()
+    //private val repository = AuthRepository()
 
     var loginSuccess by mutableStateOf(false)
         private set

@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.homesupport.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -27,6 +31,8 @@ fun SplashScreen(nav: NavHostController){
     val scale= remember{
         Animatable(0f)
     }
+    val viewModel: SplashViewModel = hiltViewModel()
+    val token by viewModel.token.collectAsState(initial = null)
 
     LaunchedEffect(true) {
         scale.animateTo(
@@ -41,12 +47,21 @@ fun SplashScreen(nav: NavHostController){
         )
 
         delay(1000)
-
-        nav.navigate("login") {
-            popUpTo("splash") {
-                inclusive = true
+        if(token!=null){
+            nav.navigate("user_dashboard") {
+                popUpTo("splash") {
+                    inclusive = true
+                }
+            }
+        }else{
+            nav.navigate("login") {
+                popUpTo("splash") {
+                    inclusive = true
+                }
             }
         }
+
+
     }
     Box(
         modifier = Modifier

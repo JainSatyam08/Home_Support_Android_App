@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -45,6 +47,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // COMPOSE BOM (Yeh version control karta hai - Sabse important line)
     implementation(platform(libs.androidx.compose.bom))
@@ -60,6 +65,9 @@ dependencies {
     // Icons aur Navigation
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.8.7")
+
+    //Datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

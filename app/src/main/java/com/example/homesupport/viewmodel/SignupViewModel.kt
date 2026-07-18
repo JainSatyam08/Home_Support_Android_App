@@ -11,9 +11,15 @@ import com.example.homesupport.dto.SignupRequest
 import kotlinx.coroutines.launch
 import com.example.homesupport.repository.AuthRepository
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 
-class SignupViewModel : ViewModel() {
-    private val repository = AuthRepository()
+@HiltViewModel
+class SignupViewModel @Inject constructor(
+    private val repository: AuthRepository
+
+) : ViewModel() {
+    //private val repository = AuthRepository()
     var error by mutableStateOf("")
         private set
 

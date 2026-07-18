@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.homesupport.components.signin.AlreadyHaveAccountPrompt
@@ -33,7 +34,7 @@ fun SignUpScreen(nav: NavHostController) {
     /* SignupViewModel is a name of a class in the above line we are making its object(instance)
 	 i.e. signupViewModel is a object or instance name.  */
 
-    val signupViewModel: SignupViewModel = viewModel()
+    val signupViewModel: SignupViewModel = hiltViewModel()
 
     LaunchedEffect(signupViewModel.signupsucces) {
         if(signupViewModel.signupsucces){
