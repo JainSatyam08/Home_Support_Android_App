@@ -16,7 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.homesupport.screens.BookingTheme
+import com.example.homesupport.ui.theme.TealPrimary
+
 
 @Composable
 fun BookingActionButtons(
@@ -57,7 +58,7 @@ fun PrimaryActionButton(
             .height(52.dp),
         shape = RoundedCornerShape(28.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = BookingTheme.TealPrimary,
+            containerColor = TealPrimary,
             contentColor = Color.White
         )
     ) {
@@ -84,9 +85,9 @@ fun SecondaryActionButton(
             .fillMaxWidth()
             .height(52.dp),
         shape = RoundedCornerShape(28.dp),
-        border = BorderStroke(1.5.dp, BookingTheme.TealPrimary),
+        border = BorderStroke(1.5.dp, TealPrimary),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = BookingTheme.TealPrimary
+            contentColor = TealPrimary
         )
     ) {
         Text(

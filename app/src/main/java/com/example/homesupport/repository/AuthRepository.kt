@@ -31,5 +31,8 @@ class AuthRepository @Inject constructor(
         return response;
     }
     fun getToken() = dataStoreManager.getToken()
+    suspend fun logout() {
+        dataStoreManager.clearToken()
+    }
 
 }

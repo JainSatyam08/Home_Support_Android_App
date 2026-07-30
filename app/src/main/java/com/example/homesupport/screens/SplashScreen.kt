@@ -1,6 +1,8 @@
 package com.example.homesupport.screens
 
 import android.view.animation.OvershootInterpolator
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -26,6 +28,13 @@ import androidx.navigation.NavHostController
 import com.example.homesupport.viewmodel.SplashViewModel
 import kotlinx.coroutines.delay
 
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import android.Manifest
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
+
 @Composable
 fun SplashScreen(nav: NavHostController){
     val scale= remember{
@@ -33,7 +42,20 @@ fun SplashScreen(nav: NavHostController){
     }
     val viewModel: SplashViewModel = hiltViewModel()
     val token by viewModel.token.collectAsState(initial = null)
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
 
+        val imageGranted =
+            permissions[Manifest.permission.READ_MEDIA_IMAGES] == true
+
+        val cameraGranted =
+            permissions[Manifest.permission.CAMERA] == true
+
+        // Abhi sirf result mil gaya
+        // Baad mein yahan snackbar ya dialog dikha sakte hain
+    }
     LaunchedEffect(true) {
         scale.animateTo(
             targetValue = 0.3f,
@@ -62,6 +84,29 @@ fun SplashScreen(nav: NavHostController){
         }
 
 
+    }
+    LaunchedEffect(Unit) {
+
+        val hasImagePermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_MEDIA_IMAGES
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val hasCameraPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+
+        // Agar dono permissions nahi hain to popup dikhao
+        if (!hasImagePermission || !hasCameraPermission) {
+
+            permissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.CAMERA
+                )
+            )
+        }
     }
     Box(
         modifier = Modifier

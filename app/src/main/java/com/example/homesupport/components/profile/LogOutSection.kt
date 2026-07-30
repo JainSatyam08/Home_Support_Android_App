@@ -11,6 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.homesupport.viewmodel.LogoutViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun LogoutSection() {
@@ -24,8 +27,9 @@ fun LogoutSection() {
 
 @Composable
 fun LogoutButton() {
+    val logoutViewModel: LogoutViewModel =hiltViewModel()
     Button(
-        onClick = { },
+        onClick = {logoutViewModel.logout() },
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
             contentColor = Color(0xFF8D6E63)

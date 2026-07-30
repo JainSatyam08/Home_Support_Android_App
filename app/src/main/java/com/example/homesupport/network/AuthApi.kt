@@ -2,6 +2,8 @@ package com.example.homesupport.network
 
 
 import com.example.homesupport.dto.ApiResponse
+import com.example.homesupport.dto.BookingRequest
+import com.example.homesupport.dto.BookingResponse
 import com.example.homesupport.dto.LoginRequest
 import com.example.homesupport.dto.LoginResponse
 import com.example.homesupport.dto.SignupRequest
@@ -18,5 +20,10 @@ interface AuthApi {
     suspend fun login(
         @Body request: LoginRequest
     ): Response<LoginResponse>
+
+    @POST("api/booking/create")
+    suspend fun createBooking(
+        @Body request: BookingRequest
+    ): Response<BookingResponse>
 
 }

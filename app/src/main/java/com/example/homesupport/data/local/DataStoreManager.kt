@@ -24,5 +24,10 @@ class DataStoreManager @Inject constructor(
         preferences[TOKEN_KEY]
 
     }
+    suspend fun clearToken() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(TOKEN_KEY)
+        }
+    }
 
 }

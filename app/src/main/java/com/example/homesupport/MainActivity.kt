@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.homesupport.nav.AppNavGraph
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             HomeSupportTheme {
                 val navController = rememberNavController()
-                val bookingViewModel: BookingViewModel = viewModel()
+                val bookingViewModel: BookingViewModel = hiltViewModel()
 
                 Scaffold(
                     content = { innerPadding ->

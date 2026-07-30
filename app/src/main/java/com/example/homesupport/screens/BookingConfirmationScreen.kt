@@ -25,32 +25,19 @@ import com.example.homesupport.viewmodel.BookingViewModel
 // ─────────────────────────────────────────────
 // DESIGN TOKENS
 // ─────────────────────────────────────────────
-object BookingTheme {
-    val TealPrimary    = Color(0xFF2A7D6F)
-    val TealDark       = Color(0xFF1E5F55)
-    val BackgroundGray = Color(0xFFF2F6F8)
-    val CardWhite      = Color(0xFFFFFFFF)
-    val TextPrimary    = Color(0xFF1A1A1A)
-    val TextSecondary  = Color(0xFF6B7280)
-    val DividerColor   = Color(0xFFE5E7EB)
-}
-
-// ─────────────────────────────────────────────
-// DATA MODEL
-// ─────────────────────────────────────────────
 
 
-// ─────────────────────────────────────────────
-// ROOT SCREEN
-// ─────────────────────────────────────────────
 @Composable
 fun BookingConfirmedScreen(
     navController: NavHostController,
     bookingViewModel: BookingViewModel
 ) {
-    Log.d("BOOKING", bookingViewModel.serviceType)
-    Log.d("BOOKING", bookingViewModel.problemType)
-    Log.d("BOOKING", bookingViewModel.problemDescription)
+    val response = bookingViewModel.bookingResponse
+
+    if (response == null) {
+        return
+    }
+
 
     Scaffold(
         bottomBar = {
@@ -68,10 +55,31 @@ fun BookingConfirmedScreen(
         ) {
             SuccessIndicatorSection()
             ConfirmationMessageText()
-            BookingDetailCard(bookingViewModel = bookingViewModel)
+            BookingDetailCard(
+                bookingId = response.bookingId,
+                trackId = response.trackId,
+                customerName = response.customerName,
+                phoneNumber = response.phoneNumber,
+                serviceType = response.serviceType,
+                status = response.status
+            )
+
             BookingActionButtons(
-                onTrackRequest = { navController.navigate(Screen.Requests.route) },
-                onBackToHome   = { navController.navigate(Screen.Home.route) }
+                onTrackRequest = {
+                    navController.navigate(Screen.Requests.route){
+                    popUpTo("user_dashboard") {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                } },
+                onBackToHome   = {
+                    bookingViewModel.clearBookingState()
+                    navController.navigate(Screen.Home.route){
+                    popUpTo("user_dashboard") {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                } }
             )
         }
     }

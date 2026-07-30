@@ -25,13 +25,10 @@ import com.example.homesupport.components.newrequest.schedulerequest.ScheduleScr
 import com.example.homesupport.components.newrequest.schedulerequest.ScheduleScreenColr.TealDark
 
 @Composable
-fun ConfirmBookingButton(navController: NavHostController,) {
+fun ConfirmBookingButton( enabled: Boolean,onClick: () -> Unit) {
     Button(
-        onClick = {
-            navController.navigate(
-                "confirmbooking"
-            )
-        },
+        enabled = enabled,
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp),
@@ -40,11 +37,17 @@ fun ConfirmBookingButton(navController: NavHostController,) {
             containerColor = NewRequestColors.GreenButton
         )
     ) {
-        Text(
-            text = "Confirm Booking",
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.White
-        )
+        if(enabled){
+            Text("Confirm Booking",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White)
+
+        }
+        else{
+            Text("Creating Booking...",fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White)
+        }
     }
 }

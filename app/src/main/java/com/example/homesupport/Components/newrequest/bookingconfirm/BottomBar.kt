@@ -14,13 +14,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.homesupport.screens.BookingTheme
+import com.example.homesupport.ui.theme.CardWhite
+import com.example.homesupport.ui.theme.TealPrimary
+import com.example.homesupport.ui.theme.TextSecondary
+
 
 @Composable
 fun BottomNavBar(modifier: Modifier = Modifier) {
     NavigationBar(
         modifier = modifier,
-        containerColor = BookingTheme.CardWhite,
+        containerColor =CardWhite,
         tonalElevation = 4.dp
     ) {
         val items = listOf(
@@ -38,11 +41,11 @@ fun BottomNavBar(modifier: Modifier = Modifier) {
                 },
                 label = { Text(label, fontSize = 11.sp) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = BookingTheme.TealPrimary,
-                    selectedTextColor = BookingTheme.TealPrimary,
-                    indicatorColor    = BookingTheme.TealPrimary.copy(alpha = 0.12f),
-                    unselectedIconColor = BookingTheme.TextSecondary,
-                    unselectedTextColor = BookingTheme.TextSecondary
+                    selectedIconColor = TealPrimary,
+                    selectedTextColor = TealPrimary,
+                    indicatorColor    = TealPrimary.copy(alpha = 0.12f),
+                    unselectedIconColor = TextSecondary,
+                    unselectedTextColor = TextSecondary
                 )
             )
         }

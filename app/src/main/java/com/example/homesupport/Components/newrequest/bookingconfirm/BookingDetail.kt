@@ -18,20 +18,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homesupport.components.newrequest.schedulerequest.ScheduleScreenColr.DividerColor
+import com.example.homesupport.components.newrequest.schedulerequest.ScheduleScreenColr.TextPrimary
+import com.example.homesupport.components.newrequest.schedulerequest.ScheduleScreenColr.TextSecondary
 import com.example.homesupport.components.newrequest.schedulerequest.TimeSlot
-import com.example.homesupport.screens.BookingTheme
+import com.example.homesupport.ui.theme.CardWhite
+
 import com.example.homesupport.viewmodel.BookingViewModel
 import java.time.LocalDate
 
 @Composable
 fun BookingDetailCard(
-    bookingViewModel: BookingViewModel,
+    bookingId: String,
+    trackId: Long,
+    customerName: String,
+    phoneNumber: String,
+    serviceType: String,
+    status: String,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = BookingTheme.CardWhite),
+        colors = CardDefaults.cardColors(containerColor = CardWhite),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -40,38 +49,98 @@ fun BookingDetailCard(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+
+            BookingIdRow(
+                bookingId=bookingId
+            )
+            HorizontalDivider(color = DividerColor, thickness = 1.dp)
+            TrackIdRow(
+                TrackId=trackId.toString()
+            )
+            HorizontalDivider(color = DividerColor, thickness = 1.dp)
             ServiceHeaderRow(
-                serviceTitle = bookingViewModel.serviceType
+                serviceTitle = serviceType
             )
 
-            HorizontalDivider(color = BookingTheme.DividerColor, thickness = 1.dp)
+            HorizontalDivider(color = DividerColor, thickness = 1.dp)
 
-            ProblemTypeRow(
-                problemType = bookingViewModel.problemType
-            )
-
-            HorizontalDivider(
-                color = BookingTheme.DividerColor,
-                thickness = 1.dp
-            )
-
-            ProblemDescriptionRow(
-                description = bookingViewModel.problemDescription
+           CustomerNameRow(
+                customerName = customerName
             )
 
             HorizontalDivider(
-                color = BookingTheme.DividerColor,
+                color = DividerColor,
                 thickness = 1.dp
             )
 
-            AppointmentTimeRow(
-                date = bookingViewModel.selectDate,
-                slot = bookingViewModel.selectSlot
+           PhoneNumberRow(
+                phoneNumber = phoneNumber
+           )
+
+            HorizontalDivider(
+                color = DividerColor,
+                thickness = 1.dp
             )
+
+            StatusRow(
+                status=status
+           )
         }
     }
 }
 
+@Composable
+private fun BookingIdRow(
+    bookingId: String,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Column {
+            Text(
+                text = "Booking ID:",
+                fontSize = 12.sp,
+                color = TextSecondary
+            )
+            Text(
+                text = bookingId,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
+            )
+        }
+    }
+
+}
+@Composable
+private fun TrackIdRow(
+    TrackId: String,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Column {
+            Text(
+                text = "Track ID:",
+                fontSize = 12.sp,
+                color = TextSecondary
+            )
+            Text(
+                text = TrackId,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                color = TextPrimary
+            )
+        }
+    }
+
+}
 @Composable
 private fun ServiceHeaderRow(
     serviceTitle: String,
@@ -86,21 +155,21 @@ private fun ServiceHeaderRow(
             Text(
                 text = "Active Request:",
                 fontSize = 12.sp,
-                color = BookingTheme.TextSecondary
+                color = TextSecondary
             )
             Text(
                 text = serviceTitle,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = BookingTheme.TextPrimary
+                color = TextPrimary
             )
         }
     }
 }
 
 @Composable
-fun ProblemTypeRow(
-    problemType: String,
+fun CustomerNameRow(
+    customerName: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -108,47 +177,46 @@ fun ProblemTypeRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Problem Type",
-            color = BookingTheme.TextSecondary
+            text = "Customer Name",
+            color = TextSecondary
         )
 
         Text(
-            text = problemType,
+            text = customerName,
             fontWeight = FontWeight.SemiBold,
-            color = BookingTheme.TextPrimary
+            color = TextPrimary
         )
     }
 }
 
 @Composable
-fun ProblemDescriptionRow(
-    description: String,
+fun PhoneNumberRow(
+    phoneNumber: String,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Problem Description",
+            text = "Phone Number",
             fontSize = 14.sp,
-            color = BookingTheme.TextSecondary
+            color = TextSecondary
         )
 
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = description.ifBlank { "No Description" },
+            text = phoneNumber,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
-            color = BookingTheme.TextPrimary
+            color = TextPrimary
         )
     }
 }
 
 @Composable
-fun AppointmentTimeRow(
-    date: LocalDate,
-    slot: TimeSlot?,
+fun StatusRow(
+    status: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -157,15 +225,15 @@ fun AppointmentTimeRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
-            text = slot?.label ?: "Not Selected",
+            text = "Status",
             fontSize = 14.sp,
-            color = BookingTheme.TextSecondary
+            color = TextSecondary
         )
         Text(
-            text = date.toString(),
+            text = status,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
-            color = BookingTheme.TextPrimary
+            color = TextPrimary
         )
     }
 }

@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.homesupport.screens.BookingTheme
+import com.example.homesupport.ui.theme.TealPrimary
+import com.example.homesupport.ui.theme.TextSecondary
+
 
 @Composable
 fun SuccessIndicatorSection(
@@ -27,7 +29,7 @@ fun SuccessIndicatorSection(
         modifier = modifier
             .size(96.dp)
             .clip(CircleShape)
-            .background(BookingTheme.TealPrimary),
+            .background(TealPrimary),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -50,7 +52,7 @@ fun ConfirmationMessageText(
     Text(
         text = message,
         fontSize = 16.sp,
-        color = BookingTheme.TextSecondary,
+        color =TextSecondary,
         textAlign = TextAlign.Center,
         lineHeight = 24.sp,
         modifier = modifier.fillMaxWidth()
