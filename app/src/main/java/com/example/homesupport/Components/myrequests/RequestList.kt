@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.homesupport.dto.AllServiceResponse
+import com.example.homesupport.viewmodel.AllRequestViewModel
 
 
 // TODO: Yaha backend/API/DB se data fetch hoga
@@ -23,7 +25,8 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun RequestList(isActive: Boolean) {
+fun RequestList(isActive: Boolean,
+                requestList: List<AllServiceResponse>) {
 
     // 🔴 TEMP DATA (Backend ke jagah use ho raha hai)
     val activeList = listOf(
@@ -51,7 +54,15 @@ fun RequestList(isActive: Boolean) {
     )
 
     // 🔴 Toggle ke hisaab se list select
-    val displayList = if (isActive) activeList else pastList
+    val displayList = if (isActive) {
+        requestList.filter {
+            it.status != "Completed" && it.status != "Cancelled"
+        }
+    } else {
+        requestList.filter {
+            it.status == "Completed" || it.status == "Cancelled"
+        }
+    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),

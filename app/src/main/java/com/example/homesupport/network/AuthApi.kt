@@ -1,6 +1,7 @@
 package com.example.homesupport.network
 
 
+import com.example.homesupport.dto.AllServiceResponse
 import com.example.homesupport.dto.ApiResponse
 import com.example.homesupport.dto.BookingRequest
 import com.example.homesupport.dto.BookingResponse
@@ -9,6 +10,7 @@ import com.example.homesupport.dto.LoginResponse
 import com.example.homesupport.dto.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 interface AuthApi {
     @POST("api/users/signup")
@@ -25,5 +27,8 @@ interface AuthApi {
     suspend fun createBooking(
         @Body request: BookingRequest
     ): Response<BookingResponse>
+
+    @GET("api/allService/requests")
+    suspend fun getAllServiceRequests(): List<AllServiceResponse>
 
 }

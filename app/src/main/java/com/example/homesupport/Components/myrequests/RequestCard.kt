@@ -2,6 +2,7 @@ package com.example.homesupport.components.myrequests
 
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.homesupport.dto.AllServiceResponse
 
 data class RequestData(
     val title: String,
@@ -43,10 +45,11 @@ data class RequestData(
     val showBookAgain: Boolean = false
 )
 @Composable
-fun RequestCard(data: RequestData) {
+fun RequestCard(data: AllServiceResponse) {
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+                            .clickable {},
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
@@ -58,112 +61,117 @@ fun RequestCard(data: RequestData) {
         ) {
 
             RequestCardHeader(
-                title = data.title,
-                isTrusted = data.isTrusted
+                serviceType = data.serviceType,
+                status=data.status
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            if (data.workerName != null) {
-                WorkerInfo(
-                    name = data.workerName,
-                    status = data.statusText ?: ""
-                )
-            } else {
-                ServiceInfo(
-                    id = data.serviceId ?: "",
-                    name = data.serviceName ?: ""
-                )
-            }
+            RequestDetails(data)
+
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            ActionButtons(
-                showBookAgain = data.showBookAgain
-            )
+            ActionButtons()
         }
     }
 }
 
 @Composable
-fun RequestCardHeader(title: String, isTrusted: Boolean) {
+fun RequestCardHeader(serviceType:String, status:String) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         Text(
-            text = title,
+            text = serviceType,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
 
-        if (isTrusted) {
-            Box(
-                modifier = Modifier
-                    .background(Color(0xFF2E7D32), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
-            ) {
-                Text(
-                    text = "trusted green",
-                    color = Color.White,
-                    fontSize = 12.sp
+        Box(
+            modifier = Modifier
+                .background(
+                    color = when (status) {
+                        "Completed" -> Color(0xFFE8F5E9)
+                        "Cancelled" -> Color(0xFFFFEBEE)
+                        "Pending" -> Color(0xFFFFF3E0)
+                        else -> Color(0xFFE3F2FD)
+                    },
+                    shape = RoundedCornerShape(20.dp)
                 )
-            }
-        }
-    }
-}
-
-@Composable
-fun WorkerInfo(name: String, status: String) {
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-
-        // Dummy profile
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .background(Color.LightGray, shape = CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(10.dp))
-
-        Column {
-            Text(text = name, fontWeight = FontWeight.SemiBold)
-            Text(text = status, color = Color.Gray, fontSize = 12.sp)
-        }
-    }
-}
-
-@Composable
-fun ServiceInfo(id: String, name: String) {
-
-    Row(verticalAlignment = Alignment.CenterVertically) {
-
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(10.dp)),
-            contentAlignment = Alignment.Center
+                .padding(horizontal = 12.dp, vertical = 5.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.List,
-                contentDescription = null
+            Text(
+                text = status,
+                color = when (status) {
+                    "Completed" -> Color(0xFF2E7D32)
+                    "Cancelled" -> Color.Red
+                    "Pending" -> Color(0xFFFF9800)
+                    else -> Color(0xFF1565C0)
+                },
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 13.sp
+            )
+        }
+    }
+}
+@Composable
+fun RequestDetails(data: AllServiceResponse) {
+
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Booking ID : ",
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = data.bookingId
+            )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Track ID : ",
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = data.trackId.toString()
             )
         }
 
-        Spacer(modifier = Modifier.width(10.dp))
 
-        Column {
-            Text(text = id, fontSize = 12.sp, color = Color.Gray)
-            Text(text = name, fontWeight = FontWeight.SemiBold)
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Updated : ",
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = data.statusUpdatedAt
+            )
         }
+
     }
 }
 
+
 @Composable
-fun ActionButtons(showBookAgain: Boolean) {
+fun ActionButtons() {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -175,7 +183,7 @@ fun ActionButtons(showBookAgain: Boolean) {
             colors = ButtonDefaults.buttonColors(Color(0xFF2E7D32)),
             modifier = Modifier.weight(1f)
         ) {
-            Text("Track")
+            Text("View Details")
         }
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -188,15 +196,6 @@ fun ActionButtons(showBookAgain: Boolean) {
             Text("Contact")
         }
 
-        if (showBookAgain) {
-            Spacer(modifier = Modifier.width(8.dp))
 
-            OutlinedButton(
-                onClick = { },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Book Again")
-            }
-        }
     }
 }
