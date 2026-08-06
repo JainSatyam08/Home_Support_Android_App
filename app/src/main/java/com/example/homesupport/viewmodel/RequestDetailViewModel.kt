@@ -1,5 +1,6 @@
 package com.example.homesupport.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,7 +29,23 @@ class RequestDetailViewModel @Inject constructor(
             errorMessage = null
 
             try {
-                requestDetail = serviceDetailRepository.getServiceDetail(bookingId)
+                val response = serviceDetailRepository.getServiceDetails(bookingId)
+                if (response.isSuccessful) {
+                    requestDetail = response.body()
+
+
+                        Log.d("DETAIL_API", "Code = ${response.code()}")
+                        Log.d("DETAIL_API", "Body = $requestDetail")
+                        Log.d("DETAIL_API", "Status = ${requestDetail?.Status}")
+
+
+
+
+                } else {
+                    errorMessage = "Error : ${response.code()}"
+                    Log.d("DETAIL_API", "Code = ${response.code()}")
+                    Log.d("DETAIL_API", "Error = ${response.errorBody()?.string()}")
+                }
             } catch (e: Exception) {
                 errorMessage = e.message
             } finally {

@@ -79,9 +79,9 @@ fun AppNavGraph(navController: NavHostController,
         }
 
         // NEW REQUEST ROUTE
-        composable("detailScreen.{bookingId}") {
+        composable("detailScreen/{bookingId}") {
             backStackEntry ->
-            val bookingId = backStackEntry.arguments?.getString("bookingId")
+            val bookingId = backStackEntry.arguments?.getString("bookingId")!!
             MyRequestDetailScreen(navController,bookingId)
         }
 

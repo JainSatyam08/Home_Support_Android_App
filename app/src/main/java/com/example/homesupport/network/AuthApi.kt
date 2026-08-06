@@ -34,7 +34,7 @@ interface AuthApi {
     @GET("api/allService/requests")
     suspend fun getAllServiceRequests(): List<AllServiceResponse>
 
-    @GET("api/allService/request-details/{bookingId}")
+    @GET("api/allService/request-detail/{bookingId}")
     suspend fun getServiceDetails(
         @Path("bookingId") bookingId: String
     ): Response<ServiceDetailResponse>

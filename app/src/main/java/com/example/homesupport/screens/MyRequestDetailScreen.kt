@@ -155,7 +155,8 @@ fun MyRequestDetailScreen(navController: NavHostController,
         }
     }
     val request=detail
-    val steps = getStatusSteps(request.status)
+
+    val steps = getStatusSteps(request.Status)
 
 
 
@@ -187,7 +188,7 @@ fun MyRequestDetailScreen(navController: NavHostController,
                 RequestIdHeaderCard(
                     requestId = request.bookingId,
                     placedDate = request.bookingDate,
-                    status = request.status
+                    status = request.Status
                 )
             }
             item {
@@ -217,7 +218,7 @@ fun MyRequestDetailScreen(navController: NavHostController,
                 }
             }
             item {
-                LocationSection(address = request.CustomerAddress)
+                LocationSection(address = request.Address)
             }
             item {
                 CustomerDetailsSection(

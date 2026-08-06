@@ -1,11 +1,11 @@
 package com.example.homesupport.dto
 
 data class ServiceDetailResponse (
-    val CustomerAddress: String,
+    val Address: String,
     val CustomerEmail: String,
     val CustomerForCno: String,
     val CustomerForName: String,
-    val status: String,
+    val Status: String,
     val bookingDate: String,
     val bookingId: String,
     val prefDate: String,
