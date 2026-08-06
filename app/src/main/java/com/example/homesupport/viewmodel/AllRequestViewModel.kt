@@ -21,7 +21,7 @@ class AllRequestViewModel @Inject constructor(
         private set
     var isLoading by mutableStateOf(false)
         private set
-    fun getAllReeequest(){
+    fun getAllRequest(){
         viewModelScope.launch {
             isLoading = true
             errorMessage=null

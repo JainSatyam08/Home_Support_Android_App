@@ -44,7 +44,7 @@ fun MyRequests(nav: NavHostController) {
     var isActive by remember { mutableStateOf(true) }
     val viewModel: AllRequestViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
-        viewModel.getAllReeequest()
+        viewModel.getAllRequest()
     }
 
 
@@ -132,7 +132,7 @@ fun MyRequests(nav: NavHostController) {
 
                         Button(
                             onClick = {
-                                viewModel.getAllReeequest()
+                                viewModel.getAllRequest()
                             }
                         ) {
                             Text("Retry")
@@ -183,7 +183,8 @@ fun MyRequests(nav: NavHostController) {
 
                 RequestList(
                     isActive = isActive,
-                    requestList = viewModel.allRequests
+                    requestList = viewModel.allRequests,
+                    nav
                 )
             }
         }

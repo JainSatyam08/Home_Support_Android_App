@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.homesupport.dto.AllServiceResponse
 import com.example.homesupport.viewmodel.AllRequestViewModel
 
@@ -26,32 +27,14 @@ import com.example.homesupport.viewmodel.AllRequestViewModel
 
 @Composable
 fun RequestList(isActive: Boolean,
-                requestList: List<AllServiceResponse>) {
+                requestList: List<AllServiceResponse>,
+                nav: NavHostController
+) {
 
     // 🔴 TEMP DATA (Backend ke jagah use ho raha hai)
-    val activeList = listOf(
-        RequestData(
-            title = "AC Repair",
-            isTrusted = true,
-            workerName = "Rahul K.",
-            statusText = "On the Way (15 mins)"
-        )
-    )
 
-    val pastList = listOf(
-        RequestData(
-            title = "Home Cleaning",
-            serviceId = "236 Repair",
-            serviceName = "Home Cleaning",
-            showBookAgain = true
-        ),
-        RequestData(
-            title = "Electrical Wiring",
-            serviceId = "235 Repair",
-            serviceName = "Vector Contour",
-            showBookAgain = true
-        )
-    )
+
+
 
     // 🔴 Toggle ke hisaab se list select
     val displayList = if (isActive) {
@@ -71,7 +54,7 @@ fun RequestList(isActive: Boolean,
     ) {
 
         items(displayList.size) { index ->
-            RequestCard(displayList[index])
+            RequestCard(displayList[index],nav)
         }
     }
 }

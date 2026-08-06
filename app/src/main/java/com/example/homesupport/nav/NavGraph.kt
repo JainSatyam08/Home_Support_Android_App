@@ -13,6 +13,7 @@ import com.example.homesupport.screens.BookingConfirmedScreen
 
 
 import com.example.homesupport.screens.HelpSupportScreen
+import com.example.homesupport.screens.MyRequestDetailScreen
 
 import com.example.homesupport.screens.MyRequests
 import com.example.homesupport.screens.NewRequestScreen
@@ -78,9 +79,11 @@ fun AppNavGraph(navController: NavHostController,
         }
 
         // NEW REQUEST ROUTE
-        /*composable("new_request") {
-            NewRequestScreen(navController)
-        }*/
+        composable("detailScreen.{bookingId}") {
+            backStackEntry ->
+            val bookingId = backStackEntry.arguments?.getString("bookingId")
+            MyRequestDetailScreen(navController,bookingId)
+        }
 
         // TRACK REQUEST ROUTE
         composable("track_request") {

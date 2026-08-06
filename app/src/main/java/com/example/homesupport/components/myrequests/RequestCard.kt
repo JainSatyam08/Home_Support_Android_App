@@ -33,7 +33,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.homesupport.dto.AllServiceResponse
+
 
 data class RequestData(
     val title: String,
@@ -45,11 +47,13 @@ data class RequestData(
     val showBookAgain: Boolean = false
 )
 @Composable
-fun RequestCard(data: AllServiceResponse) {
+fun RequestCard(data: AllServiceResponse,
+                navController: NavHostController
+) {
 
     Card(
         modifier = Modifier.fillMaxWidth()
-                            .clickable {},
+                            .clickable {navController.navigate("detailScreen/${data.bookingId}")},
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(6.dp)
     ) {

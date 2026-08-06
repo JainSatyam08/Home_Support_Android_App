@@ -7,11 +7,14 @@ import com.example.homesupport.dto.BookingRequest
 import com.example.homesupport.dto.BookingResponse
 import com.example.homesupport.dto.LoginRequest
 import com.example.homesupport.dto.LoginResponse
+import com.example.homesupport.dto.ServiceDetailResponse
 import com.example.homesupport.dto.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+
 interface AuthApi {
     @POST("api/users/signup")
     suspend fun signup(
@@ -31,4 +34,9 @@ interface AuthApi {
     @GET("api/allService/requests")
     suspend fun getAllServiceRequests(): List<AllServiceResponse>
 
+    @GET("api/allService/request-details/{bookingId}")
+    suspend fun getServiceDetails(
+        @Path("bookingId") bookingId: String
+    ): Response<ServiceDetailResponse>
 }
+
