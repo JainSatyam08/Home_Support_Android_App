@@ -10,6 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.homesupport.components.newrequest.schedulerequest.TimeSlot
 import com.example.homesupport.dto.BookingRequest
 import com.example.homesupport.dto.BookingResponse
+import com.example.homesupport.dto.ServiceDetailResponse
+import com.example.homesupport.location.LocationProvider
+import com.example.homesupport.location.LocationResult
 import com.example.homesupport.repository.BookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -18,7 +21,8 @@ import java.time.LocalDate
 import kotlin.String
 @HiltViewModel
 class BookingViewModel @Inject constructor(
-    private val bookingRepository: BookingRepository
+    private val bookingRepository: BookingRepository,
+    private val locationProvider: LocationProvider
 ): ViewModel() {
     var isLoading by mutableStateOf(false)
         private set
@@ -98,10 +102,7 @@ class BookingViewModel @Inject constructor(
     fun removeMedia(uri: Uri) {
         selectMediaUris=selectMediaUris-uri
     }
-    fun updateLocation(lat: Double, lng: Double) {
-        latitude = lat
-        longitude = lng
-    }
+
 
     fun clearError() {
         errorMessage = null
@@ -125,20 +126,27 @@ class BookingViewModel @Inject constructor(
     fun bookingRequest(){
         errorMessage=null
         viewModelScope.launch {
-            val lat = latitude ?: run {
-                errorMessage = "Location not available"
+            val locationResult = locationProvider.getFreshLocation()
+
+            if (locationResult !is LocationResult.Success) {
+                errorMessage = "Unable to fetch current location"
                 return@launch
             }
 
-            val lng = longitude ?: run {
-                errorMessage = "Location not available"
-                return@launch
-            }
+            val freshLocation = locationResult.location
 
-            val addr = address ?: run {
-                errorMessage = "Address not available"
-                return@launch
-            }
+            val lat = freshLocation.latitude
+            val lng = freshLocation.longitude
+            val addr = freshLocation.address
+
+
+            latitude = lat
+            longitude = lng
+            address = addr
+            Log.d(
+                "BOOKING_LOCATION",
+                "lat=$latitude, lng=$longitude"
+            )
 
             val slot = selectSlot ?: run {
                 errorMessage = "Please select a time slot"
@@ -179,11 +187,7 @@ class BookingViewModel @Inject constructor(
                     errorMessage = e.message ?: "Unknown Error"
 
             }
-            catch (e: Exception) {
 
-                errorMessage = e.localizedMessage ?: "Unknown Error"
-
-            }
             finally {
 
                 isLoading = false
@@ -191,6 +195,25 @@ class BookingViewModel @Inject constructor(
         }
 
     }
+    fun prepareForRebooking(request: ServiceDetailResponse) {
+        Log.d(
+            "BOOK_AGAIN",
+            "lat=${request.latitude}, lng=${request.longitude}"
+        )
+        serviceType = request.serviceType
+        problemType = request.problemType
+        problemDescription = request.problemDesc
+
+        address = request.Address
+        latitude = request.latitude
+        longitude = request.longitude
+
+        // New booking ke liye
+        //selectDate = LocalDate.now()
+        //selectSlot = null
+
+    }
+
 
 
 

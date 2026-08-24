@@ -32,6 +32,7 @@ import com.example.homesupport.components.myrequestdetail.ServiceInformationCard
 import com.example.homesupport.dto.ServiceDetailResponse
 import com.example.homesupport.ui.theme.BackgroundCream
 import com.example.homesupport.viewmodel.AllRequestViewModel
+import com.example.homesupport.viewmodel.BookingViewModel
 import com.example.homesupport.viewmodel.RequestDetailViewModel
 
 
@@ -112,6 +113,7 @@ private fun getStatusSteps(status: String): List<StatusStep> {
 }
 @Composable
 fun MyRequestDetailScreen(navController: NavHostController,
+                          bookingViewModel: BookingViewModel,
                           bookingId: String) {
    // val uiState = RequestDetailsUiState() // in a real app this would come from a ViewModel
     val viewModel:  RequestDetailViewModel=hiltViewModel()
@@ -173,7 +175,11 @@ fun MyRequestDetailScreen(navController: NavHostController,
             RequestDetailsBottomBar(
                 //totalAmount = uiState.totalAmount,
                 //isPaid = uiState.isPaid,
-                onTrackRequestClick = { /* navController.navigate("track_request") */ }
+                status=request.Status,
+                request,
+                navController,
+                bookingViewModel
+
             )
         }
     ) { paddingValues ->

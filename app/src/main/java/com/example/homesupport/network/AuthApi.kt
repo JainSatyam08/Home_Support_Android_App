@@ -5,12 +5,15 @@ import com.example.homesupport.dto.AllServiceResponse
 import com.example.homesupport.dto.ApiResponse
 import com.example.homesupport.dto.BookingRequest
 import com.example.homesupport.dto.BookingResponse
+import com.example.homesupport.dto.CancelRequest
+import com.example.homesupport.dto.CancelResponseDTO
 import com.example.homesupport.dto.LoginRequest
 import com.example.homesupport.dto.LoginResponse
 import com.example.homesupport.dto.ServiceDetailResponse
 import com.example.homesupport.dto.SignupRequest
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -38,5 +41,11 @@ interface AuthApi {
     suspend fun getServiceDetails(
         @Path("bookingId") bookingId: String
     ): Response<ServiceDetailResponse>
+
+    @DELETE("api/booking/{bookingId}/cancel")
+    suspend fun cancelBooking(
+        @Path("bookingId") bookingId: String,
+        @Body request: CancelRequest
+    ): Response<CancelResponseDTO>
 }
 

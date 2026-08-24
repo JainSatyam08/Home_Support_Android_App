@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import com.example.homesupport.location.LocationGate
 import com.example.homesupport.nav.AppNavGraph
 import com.example.homesupport.ui.theme.HomeSupportTheme
 import com.example.homesupport.viewmodel.BookingViewModel
@@ -34,10 +35,15 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(innerPadding)
                         ) {
-                            AppNavGraph(
-                                navController = navController,
-                                bookingViewModel = bookingViewModel
-                            )
+                            LocationGate { locationData ->
+                                AppNavGraph(
+                                    navController = navController,
+                                    bookingViewModel = bookingViewModel,
+                                    locationData = locationData
+                                )
+
+                            }
+
                         }
                     }
                 )

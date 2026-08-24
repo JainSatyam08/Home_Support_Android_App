@@ -13,5 +13,7 @@ data class ServiceDetailResponse (
     val problemDesc: String,
     val problemType: String,
     val serviceType: String,
-    val statusUpdatedAt: String
+    val statusUpdatedAt: String,
+    val latitude: Double,
+    val longitude: Double
 )

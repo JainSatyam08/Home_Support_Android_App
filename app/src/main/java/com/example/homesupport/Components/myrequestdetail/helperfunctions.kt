@@ -23,6 +23,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.example.homesupport.dto.ServiceDetailResponse
 import com.example.homesupport.ui.theme.BackgroundCream
 import com.example.homesupport.ui.theme.CardWhite
 import com.example.homesupport.ui.theme.DarkGreen
@@ -30,13 +33,18 @@ import com.example.homesupport.ui.theme.LightGreenChip
 import com.example.homesupport.ui.theme.NavyText
 import com.example.homesupport.ui.theme.PrimaryGreen
 import com.example.homesupport.ui.theme.SubtleGray
+import com.example.homesupport.viewmodel.BookingViewModel
 
 @Composable
 fun RequestDetailsBottomBar(
     //totalAmount: String,
     //isPaid: Boolean,
-    onTrackRequestClick: () -> Unit
+    status:String,
+    request: ServiceDetailResponse,
+    navController: NavHostController,
+    bookingViewModel: BookingViewModel
 ) {
+
     Surface(color = BackgroundCream, shadowElevation = 8.dp) {
         Row(
             modifier = Modifier
@@ -56,12 +64,29 @@ fun RequestDetailsBottomBar(
             }
             Spacer(modifier = Modifier.weight(1f))
             Button(
-                onClick = onTrackRequestClick,
+
+                onClick = {
+                    if(status.toUpperCase()=="COMPLETED" || status.toUpperCase()=="CANCELLED" || status.toUpperCase()=="CLOSED"){
+                        bookingViewModel.prepareForRebooking(request)
+                        navController.navigate("schedulescreen")
+
+                    }
+                    else{
+                        navController.navigate("cancel_request")
+                    }
+
+                },
                 shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = PrimaryGreen),
                 contentPadding = PaddingValues(horizontal = 24.dp, vertical = 14.dp)
             ) {
-                Text(text = "Track Request", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                if(status.toUpperCase()=="COMPLETED" || status.toUpperCase()=="CANCELLED" || status.toUpperCase()=="CLOSED"){
+                    Text(text = "Book Again", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                }
+                else{
+                    Text(text = "Cancel Request", fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+                }
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(
                     imageVector = Icons.Filled.ArrowForward,

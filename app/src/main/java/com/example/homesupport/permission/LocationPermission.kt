@@ -21,8 +21,11 @@ fun LocationPermissionHandler(
             permissionState.launchPermissionRequest()
         }
     }
-
-    if (permissionState.status.isGranted) {
-        onPermissionGranted()
+    LaunchedEffect(permissionState.status.isGranted) {
+        if (permissionState.status.isGranted) {
+            onPermissionGranted()
+        }
     }
+
+
 }

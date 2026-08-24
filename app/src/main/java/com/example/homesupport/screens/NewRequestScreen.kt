@@ -52,24 +52,27 @@ import java.io.File
 
 import android.os.Handler
 import android.os.Looper
+import com.example.homesupport.location.LocationData
 
 
 @Composable
 
 fun NewRequestScreen(nav: NavHostController, serviceType: String?,
-                     bookingViewModel: BookingViewModel) {
+                     bookingViewModel: BookingViewModel,
+                     locationData: LocationData) {
     //val bookingViewModel: BookingViewModel = viewModel()
     LaunchedEffect(serviceType) {
         bookingViewModel.updateServiceType(serviceType ?: "")
     }
-    RequestContent(nav = nav, modifier = Modifier,serviceType,bookingViewModel=bookingViewModel)
+    RequestContent(nav = nav, modifier = Modifier,serviceType,bookingViewModel=bookingViewModel,locationData=locationData)
 }
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun RequestContent(nav: NavHostController,
                      modifier: Modifier,
                    serviceType: String?,
-                   bookingViewModel: BookingViewModel) {
+                   bookingViewModel: BookingViewModel,
+                   locationData: LocationData) {
 
     //val bookingViewModel: BookingViewModel = viewModel()
 
@@ -122,7 +125,7 @@ fun RequestContent(nav: NavHostController,
 
     }
 
-    var address by remember { mutableStateOf("Fetching location...") }
+
 
 
 
@@ -137,40 +140,16 @@ fun RequestContent(nav: NavHostController,
                 .padding(top = 70.dp) // Adjust based on header height
         ) {
             // Location Permission logic (Invisible)
-            LocationPermissionHandler {
-                permissionGranted = true
-                getCurrentLocation(context) { location ->
-                    location?.let {
-                        address = getAddressFromLocation(
-                            context,
-                            it.latitude,
-                            it.longitude
-                        )
-                        bookingViewModel.updateaddress(address);
-                        bookingViewModel.updateLocation(
-                            it.latitude,
-                            it.longitude
-                        )
-                    }
-                }
-            }
+
 
             // Location Bar - Spans full width
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                if (permissionGranted) {
-                    LocationBar(address)
-                } else {
-                    Text(
-                        text = "Location permission required",
-                        color = Color.White,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(bottom = 16.dp)
-                    )
-                }
+
+                LocationBar(locationData.address)
+
             }
 
             Spacer(modifier = Modifier.height(10.dp)) // Added space after LocationBar

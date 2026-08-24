@@ -9,7 +9,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.homeservices.ui.cancelrequest.CancelRequestScreen
+import com.example.homesupport.location.LocationData
 import com.example.homesupport.screens.BookingConfirmedScreen
+import com.example.homesupport.screens.CancellationConfirmedScreen
 
 
 import com.example.homesupport.screens.HelpSupportScreen
@@ -29,7 +32,8 @@ import com.example.homesupport.viewmodel.BookingViewModel
 
 @Composable
 fun AppNavGraph(navController: NavHostController,
-                bookingViewModel: BookingViewModel
+                bookingViewModel: BookingViewModel,
+                locationData: LocationData
 ) {
     NavHost(
         navController = navController,
@@ -45,7 +49,7 @@ fun AppNavGraph(navController: NavHostController,
             SignUpScreen(navController)
         }
         composable("user_dashboard") {
-            UserDashboard(navController)
+            UserDashboard(navController,locationData)
         }
         composable("requests") {
              MyRequests(navController)
@@ -66,7 +70,7 @@ fun AppNavGraph(navController: NavHostController,
             })
         ){ backStackEntry ->
             val servicetype = backStackEntry.arguments?.getString("servicetype")
-            NewRequestScreen(navController,servicetype,bookingViewModel)
+            NewRequestScreen(navController,servicetype,bookingViewModel,locationData)
 
         }
 
@@ -82,13 +86,22 @@ fun AppNavGraph(navController: NavHostController,
         composable("detailScreen/{bookingId}") {
             backStackEntry ->
             val bookingId = backStackEntry.arguments?.getString("bookingId")!!
-            MyRequestDetailScreen(navController,bookingId)
+            MyRequestDetailScreen(navController,bookingViewModel,bookingId)
         }
 
         // TRACK REQUEST ROUTE
         composable("track_request") {
             TrackRequestScreen(navController)
         }
+
+        composable("cancel_request"){
+            CancelRequestScreen(navController)
+        }
+        composable("cancel_confirm") {
+            CancellationConfirmedScreen(navController)
+        }
+
+
 
     }
 }

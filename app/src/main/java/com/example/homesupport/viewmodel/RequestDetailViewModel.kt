@@ -34,9 +34,9 @@ class RequestDetailViewModel @Inject constructor(
                     requestDetail = response.body()
 
 
-                        Log.d("DETAIL_API", "Code = ${response.code()}")
-                        Log.d("DETAIL_API", "Body = $requestDetail")
-                        Log.d("DETAIL_API", "Status = ${requestDetail?.Status}")
+                    Log.d("DETAIL_API", "Code = ${response.code()}")
+                    Log.d("DETAIL_API", "Body = $requestDetail")
+                    Log.d("DETAIL_API", "Status = ${requestDetail?.Status}")
 
 
 
