@@ -25,7 +25,7 @@ class AuthRepository @Inject constructor(
         val response= api.login(request)
         if(response.isSuccessful){
             val token = response.body()?.token?.let { token ->
-                dataStoreManager.saveToken(token)
+                dataStoreManager.saveSession(token,"User")
             }
         }
         return response;

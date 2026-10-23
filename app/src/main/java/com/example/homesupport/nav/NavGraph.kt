@@ -10,9 +10,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.homeservices.ui.cancelrequest.CancelRequestScreen
+import com.example.homesupport.EMPLOYEE.screens.DashboardScreenG
+import com.example.homesupport.EMPLOYEE.screens.EmployeeLoginScreenG
 import com.example.homesupport.location.LocationData
 import com.example.homesupport.screens.BookingConfirmedScreen
 import com.example.homesupport.screens.CancellationConfirmedScreen
+import com.example.homesupport.screens.ContinueAsScreenG
 
 
 import com.example.homesupport.screens.HelpSupportScreen
@@ -42,8 +45,15 @@ fun AppNavGraph(navController: NavHostController,
         composable("splash"){
             SplashScreen(navController)
         }
+
+        composable(route="continue") {
+            ContinueAsScreenG(navController)
+        }
         composable("login"){
             SignInScreen(navController)
+        }
+        composable("emp_login") {
+            EmployeeLoginScreenG(navController)
         }
         composable("signup"){
             SignUpScreen(navController)
@@ -99,6 +109,11 @@ fun AppNavGraph(navController: NavHostController,
         }
         composable("cancel_confirm") {
             CancellationConfirmedScreen(navController)
+        }
+        composable("employeeDashBoard/{name}") {
+            backStackEntry->
+            val employeeName=backStackEntry.arguments?.getString("name")?:"Warden"
+            DashboardScreenG(navController,employeeName)
         }
 
 

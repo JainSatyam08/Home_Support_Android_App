@@ -20,7 +20,7 @@ class LogoutViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            dataStoreManager.clearToken()
+            dataStoreManager.clearSession()
             logoutSuccess = true
         }
     }
