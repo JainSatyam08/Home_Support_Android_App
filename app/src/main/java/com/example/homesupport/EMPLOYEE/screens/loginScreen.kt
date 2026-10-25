@@ -320,9 +320,9 @@ fun InputFieldG(
     }
 }
 
-// ---------- Preview ----------
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun EmployeeLoginScreenPreview() {
-    EmployeeLoginScreenG(navController = rememberNavController())
-}
+//// ---------- Preview ----------
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun EmployeeLoginScreenPreview() {
+//    EmployeeLoginScreenG(navController = rememberNavController())
+//}

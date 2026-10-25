@@ -97,11 +97,23 @@ class SignupViewModel @Inject constructor(
                     signupsucces = true
 
                 } else {
-
                     val errorJson = response.errorBody()?.string()
-                    val apiError = Gson().fromJson(errorJson, ApiResponse::class.java)
-                    error = apiError.message
 
+                    val apiError = try {
+                        if (!errorJson.isNullOrBlank()) {
+                            Gson().fromJson(
+                                errorJson,
+                                ApiResponse::class.java
+                            )
+                        } else {
+                            null
+                        }
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    error = apiError?.message
+                        ?: "Login failed: ${response.code()}"
                 }
 
 

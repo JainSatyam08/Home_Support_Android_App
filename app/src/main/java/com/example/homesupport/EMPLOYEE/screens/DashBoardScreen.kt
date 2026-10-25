@@ -11,6 +11,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,12 +32,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.homesupport.EMPLOYEE.viewmodel.DashBoardViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+
 
 /* ------------------------------------------------------------------ */
 /*  Dependencies chahiye:                                              */
@@ -60,16 +61,26 @@ enum class StatType(
     val tint: Color,
     val bg: Color
 ) {
-    TOTAL("Total Complaints", Icons.Default.Description, Color(0xFF2F80ED), Color(0xFFEFF5FF)),
-    NEW("New Complaints", Icons.Default.Schedule, Color(0xFFF2994A), Color(0xFFFFF7EC)),
-    IN_PROGRESS("In Progress", Icons.Default.Sync, Color(0xFF8B5CF6), Color(0xFFF5F0FF)),
-    RESOLVED("Resolved", Icons.Default.CheckCircle, Color(0xFF27AE60), Color(0xFFEDFAF3))
+    TOTAL("Total Complaints", Icons.Default.Description,
+    Color(0xFF2F80ED), Color(0xFFEFF5FF)),
+
+    NEW("New Complaints", Icons.Default.Schedule,
+    Color(0xFFF2994A), Color(0xFFFFF7EC)),
+
+    REVIEWED("Reviewed", Icons.Default.Visibility,
+    Color(0xFF8B5CF6), Color(0xFFF5F0FF)),
+
+    COMPLETED("Completed", Icons.Default.CheckCircle,
+    Color(0xFF27AE60), Color(0xFFEDFAF3)),
+
+    CANCELLED("Cancelled", Icons.Default.Cancel,
+    Color(0xFFD32F2F), Color(0xFFFFEEEE))
 }
 
 data class OverviewStat(
     val type: StatType,
-    val count: Int,
-    val changePercent: Int // negative bhi ho sakta hai -> arrow down + red ho jayega
+    val count: Long,
+
 )
 
 // Category -> donut ka color + complaint list ka icon, dono yahi se
@@ -77,32 +88,27 @@ enum class ComplaintCategory(val label: String, val color: Color, val icon: Imag
     ELECTRICAL("Electrical", Color(0xFF2F80ED), Icons.Default.Bolt),
     PLUMBING("Plumbing", Color(0xFFFFA726), Icons.Default.WaterDrop),
     CLEANING("Cleaning", Color(0xFF3DBE6C), Icons.Default.CleaningServices),
-    CIVIL("Civil", Color(0xFFB57EDC), Icons.Default.Build),
+    APPLIANCE("Appliance", Color(0xFFB57EDC), Icons.Default.HomeRepairService),
     OTHERS("Others", Color(0xFF9FB0CC), Icons.Default.MoreHoriz)
 }
 
 // Donut chart ye list se draw hota hai -> list change hui to chart apne aap change
-data class CategorySlice(val category: ComplaintCategory, val count: Int)
+data class CategorySlice(val category: ComplaintCategory, val count: Long)
 
-enum class Priority(val label: String, val textColor: Color, val bgColor: Color) {
-    HIGH("High", Color(0xFFD32F2F), Color(0xFFFFE4E4)),
-    MEDIUM("Medium", Color(0xFFE67E00), Color(0xFFFFF0D6)),
-    LOW("Low", Color(0xFF1E8E3E), Color(0xFFE3F7E8))
-}
+
 
 data class Complaint(
     val id: String,
     val title: String,
     val location: String,
     val category: ComplaintCategory,
-    val priority: Priority,
     val timeAgo: String
 )
 
-enum class TimeRange(val label: String) {
-    LAST_7_DAYS("Last 7 Days"),
-    LAST_30_DAYS("Last 30 Days"),
-    THIS_YEAR("This Year")
+enum class TimeRange(val label: String,val days:Int) {
+    LAST_7_DAYS("Last 7 Days",7),
+    LAST_30_DAYS("Last 30 Days",30),
+    THIS_YEAR("This Year",365)
 }
 
 // Poori screen ki state ek hi jagah
@@ -118,72 +124,88 @@ data class DashboardUiState(
 )
 
 // ===================== VIEWMODEL =====================
-class DashboardViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DashboardUiState())
-    val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
-
-    init {
-        loadDashboard(TimeRange.LAST_7_DAYS)
-    }
-
-    // Dropdown se range select hone par call hota hai
-    fun onRangeSelected(range: TimeRange) {
-        loadDashboard(range)
-    }
-
-    private fun loadDashboard(range: TimeRange) {
-        // TODO: ===== YAHA SE DEMO DATA HATA KE REAL DATA LAGA =====
-        // Repository / API call yaha karna (viewModelScope.launch { ... }) aur result se
-        // _uiState.value = _uiState.value.copy(...) kar dena. Range ke hisaab se query bhej sakta hai.
-        _uiState.value = DashboardUiState(
-            // TODO: warden ka naam / role / hostel -> login ya profile API se
-            wardenName = "Dr. Sharma",
-            wardenRole = "Warden",
-            hostelName = "Main Hostel",
-
-            // TODO: unread notifications ka count/flag backend se
-            hasUnreadNotifications = true,
-
-            selectedRange = range,
-
-            // TODO: overview counts + vs last week percent -> stats API se
-            overview = listOf(
-                OverviewStat(StatType.TOTAL, 48, 12),
-                OverviewStat(StatType.NEW, 12, 3),
-                OverviewStat(StatType.IN_PROGRESS, 18, 5),
-                OverviewStat(StatType.RESOLVED, 16, 20)
-            ),
-
-            // TODO: category wise count -> donut chart isi list se banta hai.
-            // Total center me sum se auto calculate hota hai, categories add/remove bhi kar sakta hai.
-            categories = listOf(
-                CategorySlice(ComplaintCategory.ELECTRICAL, 16),
-                CategorySlice(ComplaintCategory.PLUMBING, 10),
-                CategorySlice(ComplaintCategory.CLEANING, 8),
-                CategorySlice(ComplaintCategory.CIVIL, 6),
-                CategorySlice(ComplaintCategory.OTHERS, 8)
-            ),
-
-            // TODO: recent complaints -> complaints API (latest 4-5, createdAt se "2h ago" nikal lena)
-            recentComplaints = listOf(
-                Complaint("HS-EL-2026-000017", "Fan not working in Room 204", "Block B - Room 204", ComplaintCategory.ELECTRICAL, Priority.HIGH, "2h ago"),
-                Complaint("HS-PL-2026-000015", "Water leakage in Room 312", "Block C - Room 312", ComplaintCategory.PLUMBING, Priority.MEDIUM, "4h ago"),
-                Complaint("HS-CV-2026-000013", "Room cleaning not done", "Block A - Room 101", ComplaintCategory.CLEANING, Priority.LOW, "6h ago"),
-                Complaint("HS-CV-2026-000012", "Broken chair in common area", "Common Area", ComplaintCategory.CIVIL, Priority.MEDIUM, "8h ago")
-            )
-        )
-    }
-}
 
 // ===================== SCREEN =====================
 @Composable
 fun DashboardScreenG(
     navController: NavController,
     name: String,
-    viewModel: DashboardViewModel = viewModel()
+    viewModel: DashBoardViewModel = hiltViewModel()
 ) {
-    val state by viewModel.uiState.collectAsState()
+    //val state by viewModel.uiState.collectAsState()
+
+    val isLoadingStats = viewModel.isLoadingStats
+    val isLoadingCategories = viewModel.isLoadingServiceType
+    val isLoadingComplaints = viewModel.isLoadingRecentService
+
+    val errorStats = viewModel.errorMessageStats
+    val errorCategories = viewModel.errorMessageServiceType
+    val errorComplaints = viewModel.errorMessageRecentService
+
+    var selectedRange by remember {
+        mutableStateOf(TimeRange.LAST_7_DAYS)
+    }
+
+
+    LaunchedEffect(viewModel) {
+        viewModel.loadCountStats(selectedRange.days)
+        viewModel.loadServiceType()
+        viewModel.loadRecentService()
+    }
+
+    val stats = viewModel.serviceStats;
+    val categories = viewModel.serviceType;
+    val complaints = viewModel.recentService
+
+
+
+
+
+    val overviewStats = stats?.let {
+        listOf(
+            OverviewStat(StatType.TOTAL, it.total?:0L),
+            OverviewStat(StatType.NEW, it.newcount?:0L),
+            OverviewStat(StatType.REVIEWED, stats.reviewed?:0L),
+            OverviewStat(StatType.COMPLETED, it.completed?:0L),
+            OverviewStat(StatType.CANCELLED, it.cancelled?:0L)
+        )
+    } ?: emptyList()
+
+    val categorySlices = categories?.let {
+        listOf(
+            CategorySlice(ComplaintCategory.ELECTRICAL, it.electrician?:0L),
+            CategorySlice(ComplaintCategory.PLUMBING, it.plumbing?:0L),
+            CategorySlice(ComplaintCategory.CLEANING, it.cleaning?:0L),
+            CategorySlice(ComplaintCategory.APPLIANCE, it.appliance?:0L)
+        )
+    } ?: emptyList()
+
+    val recentComplaints = complaints.take(5).map { item ->
+
+        val category = when (item.serviceType.lowercase()) {
+            "plumbing" -> ComplaintCategory.PLUMBING
+            "electrician", "electrical" -> ComplaintCategory.ELECTRICAL
+            "cleaning" -> ComplaintCategory.CLEANING
+            "appliance" -> ComplaintCategory.APPLIANCE
+            else -> ComplaintCategory.APPLIANCE
+        }
+
+        Complaint(
+            id = item.bookingId,
+            title = item.problemDesc?.takeIf { it.isNotBlank() }
+                ?: "No description provided",
+            location = listOfNotNull(
+                item.location,
+                item.roomNo
+            ).joinToString(" • ").ifBlank {
+                "Location unavailable"
+            },
+            category = category,
+            timeAgo = item.timeCalculated
+        )
+    }
+
 
     Scaffold(
         containerColor = ScreenBgG,
@@ -194,21 +216,107 @@ fun DashboardScreenG(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .verticalScroll(rememberScrollState()),
+                //.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             TopBarG(
-                hasUnread = state.hasUnreadNotifications,
+                hasUnread = false,
                 onMenuClick = { /* TODO: drawer open */ },
                 onBellClick = { /* TODO: navController.navigate("notifications") */ }
             )
-            WelcomeCardG(name, state.wardenRole, state.hostelName)
-            OverviewHeaderG(state.selectedRange, viewModel::onRangeSelected)
-            OverviewRowG(state.overview)
-            CategoryCardG(state.categories)
+            WelcomeCardG(name, "Employee", "Hostel")
+            OverviewHeaderG(selected = selectedRange,
+                onSelect = {range ->
+                    selectedRange = range
+                    viewModel.loadCountStats(range.days)})
+
+             when {
+                 isLoadingStats -> {
+                     Box(
+                         modifier = Modifier
+                             .fillMaxWidth()
+                             .height(120.dp),
+                         contentAlignment = Alignment.Center
+                     ) {
+                         CircularProgressIndicator()
+                     }
+                 }
+
+                 errorStats != null -> {
+                     Text(
+                         text = errorStats,
+                         color = Color.Red,
+                         modifier = Modifier.padding(horizontal = 16.dp)
+                     )
+
+                     TextButton(
+                         onClick = { viewModel.loadCountStats(selectedRange.days) }
+                     ) {
+                         Text("Retry")
+                     }
+                 }
+
+                 else -> {
+                     OverviewRowG(overviewStats)
+                 }
+             }
+            //OverviewRowG(overviewStats)
+
+             when {
+                 isLoadingCategories -> {
+                     CircularProgressIndicator(
+                         modifier = Modifier.padding(16.dp)
+                     )
+                 }
+
+                 errorCategories != null -> {
+                     Text(
+                         text = errorCategories,
+                         color = Color.Red
+                     )
+
+                     TextButton(onClick = { viewModel.loadServiceType() }) {
+                         Text("Retry")
+                     }
+                 }
+
+                 else -> {
+                     CategoryCardG(categorySlices)
+                 }
+             }
             RecentHeaderG(onViewAll = { /* TODO: navController.navigate("complaints") */ })
-            RecentComplaintsCardG(state.recentComplaints)
+             when {
+                 isLoadingComplaints -> {
+                     CircularProgressIndicator(
+                         modifier = Modifier.padding(16.dp)
+                     )
+                 }
+
+                 errorComplaints != null -> {
+                     Text(
+                         text = errorComplaints,
+                         color = Color.Red
+                     )
+
+                     TextButton(onClick = { viewModel.loadRecentService() }) {
+                         Text("Retry")
+                     }
+                 }
+
+                 recentComplaints.isEmpty() -> {
+                     Text(
+                         text = "No recent complaints found",
+                         color = SubtleTextG,
+                         modifier = Modifier.padding(16.dp)
+                     )
+                 }
+
+                 else -> {
+                     RecentComplaintsCardG(recentComplaints)
+                 }
+             }
+
         }
     }
 }
@@ -259,7 +367,7 @@ fun WelcomeCardG(name: String, role: String, hostel: String) {
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             Text("Good Morning,", fontSize = 14.sp, color = NavyG) // TODO: time ke hisaab se Morning/Afternoon/Evening
-            Text(name, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = NavyG)
+            Text("$name", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = NavyG)
             Text("$role  •  $hostel", fontSize = 13.sp, color = SubtleTextG)
         }
         // Profile avatar
@@ -304,15 +412,15 @@ fun OverviewHeaderG(selected: TimeRange, onSelect: (TimeRange) -> Unit) {
 @Composable
 fun OverviewRowG(stats: List<OverviewStat>) {
     // List jitni badi hogi utne cards weight se barabar bat jayenge
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-        stats.forEach { stat -> StatCardG(stat, Modifier.weight(1f)) }
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+        items(stats) { stat -> StatCardG(stat, modifier = Modifier.width(150.dp)) }
     }
 }
 
 @Composable
 fun StatCardG(stat: OverviewStat, modifier: Modifier = Modifier) {
-    val isUp = stat.changePercent >= 0
-    val trendColor = if (isUp) Color(0xFF27AE60) else Color(0xFFD32F2F)
+    //val isUp = stat.changePercent >= 0
+    //val trendColor = if (isUp) Color(0xFF27AE60) else Color(0xFFD32F2F)
 
     Column(
         modifier = modifier
@@ -330,14 +438,16 @@ fun StatCardG(stat: OverviewStat, modifier: Modifier = Modifier) {
         Text(stat.count.toString(), fontSize = 26.sp, fontWeight = FontWeight.Bold, color = NavyG)
         Text(stat.type.label, fontSize = 11.sp, color = SubtleTextG, lineHeight = 14.sp, minLines = 2)
         Spacer(Modifier.height(6.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                if (isUp) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
-                null, tint = trendColor, modifier = Modifier.size(12.dp)
-            )
-            Text("${kotlin.math.abs(stat.changePercent)}%", fontSize = 11.sp, color = trendColor, fontWeight = FontWeight.SemiBold)
-        }
-        Text("vs last week", fontSize = 9.sp, color = SubtleTextG)
+
+        //We are not Calculating change Percentage
+//        Row(verticalAlignment = Alignment.CenterVertically) {
+//            Icon(
+//                if (isUp) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
+//                null, tint = trendColor, modifier = Modifier.size(12.dp)
+//            )
+//            //Text("${kotlin.math.abs(stat.changePercent)}%", fontSize = 11.sp, color = trendColor, fontWeight = FontWeight.SemiBold)
+//        }
+//        //Text("vs last week", fontSize = 9.sp, color = SubtleTextG)
     }
 }
 
@@ -379,7 +489,7 @@ fun DonutChartG(slices: List<CategorySlice>, modifier: Modifier = Modifier) {
             val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
             val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
 
-            if (total == 0) {
+            if (total == 0L) {
                 // Data nahi hai to grey ring
                 drawArc(Color(0xFFE3EAF6), 0f, 360f, false, topLeft, arcSize, style = Stroke(strokeWidth))
                 return@Canvas
@@ -479,25 +589,14 @@ fun ComplaintItemG(complaint: Complaint) {
             }
         }
         Column(horizontalAlignment = Alignment.End) {
-            PriorityChipG(complaint.priority)
+            //PriorityChipG(complaint.priority)
             Spacer(Modifier.height(6.dp))
             Text(complaint.timeAgo, fontSize = 12.sp, color = SubtleTextG)
         }
     }
 }
 
-@Composable
-fun PriorityChipG(priority: Priority) {
-    Text(
-        text = priority.label,
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Medium,
-        color = priority.textColor,
-        modifier = Modifier
-            .background(priority.bgColor, RoundedCornerShape(50))
-            .padding(horizontal = 14.dp, vertical = 4.dp)
-    )
-}
+
 
 // ===================== BOTTOM BAR =====================
 private data class NavItemG(val label: String, val icon: ImageVector, val route: String)
@@ -537,43 +636,3 @@ fun BottomBarG(navController: NavController) {
 }
 
 
-//
-//@Preview(showBackground = true, showSystemUi = true, name = "Dashboard")
-//@Composable
-//fun DashboardPreview() {
-//    // Preview ke liye alag sample data, ViewModel use nahi ho raha
-//    val sampleState = DashboardUiState(
-//        wardenName = "Dr. Sharma",
-//        wardenRole = "Warden",
-//        hostelName = "Main Hostel",
-//        hasUnreadNotifications = true,
-//        selectedRange = TimeRange.LAST_7_DAYS,
-//        overview = listOf(
-//            OverviewStat(StatType.TOTAL, 48, 12),
-//            OverviewStat(StatType.NEW, 12, 3),
-//            OverviewStat(StatType.IN_PROGRESS, 18, 5),
-//            OverviewStat(StatType.RESOLVED, 16, 20)
-//        ),
-//        categories = listOf(
-//            CategorySlice(ComplaintCategory.ELECTRICAL, 16),
-//            CategorySlice(ComplaintCategory.PLUMBING, 10),
-//            CategorySlice(ComplaintCategory.CLEANING, 8),
-//            CategorySlice(ComplaintCategory.CIVIL, 6),
-//            CategorySlice(ComplaintCategory.OTHERS, 8)
-//        ),
-//        recentComplaints = listOf(
-//            Complaint("HS-EL-2026-000017", "Fan not working in Room 204", "Block B - Room 204", ComplaintCategory.ELECTRICAL, Priority.HIGH, "2h ago"),
-//            Complaint("HS-PL-2026-000015", "Water leakage in Room 312", "Block C - Room 312", ComplaintCategory.PLUMBING, Priority.MEDIUM, "4h ago"),
-//            Complaint("HS-CV-2026-000013", "Room cleaning not done", "Block A - Room 101", ComplaintCategory.CLEANING, Priority.LOW, "6h ago"),
-//            Complaint("HS-CV-2026-000012", "Broken chair in common area", "Common Area", ComplaintCategory.CIVIL, Priority.MEDIUM, "8h ago")
-//        )
-//    )
-//
-//    MaterialTheme {
-//        DashboardScreenG(
-//            //state = sampleState,
-//            navController = rememberNavController(),
-//            //onRangeSelected = {}
-//        )
-//    }
-//}

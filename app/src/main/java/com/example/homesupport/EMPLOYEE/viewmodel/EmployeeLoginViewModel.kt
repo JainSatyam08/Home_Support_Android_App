@@ -79,7 +79,15 @@ class EmployeeLoginViewModel @Inject constructor(
                         else -> "Login failed. Please try again."
                     }
                 }
-            } catch (e: java.io.IOException) {
+            }
+            catch (e: Exception) {
+                android.util.Log.e(
+                    "EMPLOYEE_LOGIN",
+                    "Login failed: ${e.message}",
+                    e
+                )
+                // Apna existing error-state update yahin rehne do
+            }catch (e: java.io.IOException) {
                 error = "Unable to connect to server"
             } catch (e: Exception) {
                 error = "Something went wrong"

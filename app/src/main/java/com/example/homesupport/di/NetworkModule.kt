@@ -1,5 +1,6 @@
 package com.example.homesupport.di
 
+import com.example.homesupport.EMPLOYEE.network.EmployeeAuthApi
 import com.example.homesupport.network.AuthApi
 import com.example.homesupport.network.AuthInterceptor
 import dagger.Module
@@ -42,5 +43,13 @@ object NetworkModule{
     @Singleton
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEmployeeAuthApi(
+        retrofit: Retrofit
+    ): EmployeeAuthApi {
+        return retrofit.create(EmployeeAuthApi::class.java)
     }
 }

@@ -62,15 +62,24 @@ class LoginViewModel @Inject constructor(
                     android.util.Log.d("JWT",token?:"No Token")
                     loginSuccess = true
                 }
-                else{
+                else {
                     val errorJson = response.errorBody()?.string()
 
-                    val apiError = Gson().fromJson(
-                        errorJson,
-                        ApiResponse::class.java
-                    )
+                    val apiError = try {
+                        if (!errorJson.isNullOrBlank()) {
+                            Gson().fromJson(
+                                errorJson,
+                                ApiResponse::class.java
+                            )
+                        } else {
+                            null
+                        }
+                    } catch (e: Exception) {
+                        null
+                    }
 
-                    error = apiError.message
+                    error = apiError?.message
+                        ?: "Login failed: ${response.code()}"
                 }
 
             }

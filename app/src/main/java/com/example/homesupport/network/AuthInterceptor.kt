@@ -12,21 +12,34 @@ class AuthInterceptor @Inject constructor(
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest=chain.request()
+        val path = originalRequest.url.encodedPath
 
-        val token = runBlocking{
-            dataStoreManager.getToken().first()
+        val isPublicEndpoint =
+            path.endsWith("/api/users/login") ||
+                    path.endsWith("/api/users/signup") ||
+                    path.endsWith("/auth/employee/login")
 
-        }
+
+
+
+
         val requestBuilder = originalRequest.newBuilder()
-        if(token!=null){
-            android.util.Log.d(
-                "AUTH_INTERCEPTOR",
-                "Sending token: $token"
-            )
-            requestBuilder.header(
-                "Authorization",
-                "Bearer $token"
-            )
+        if(!isPublicEndpoint){
+            val token = runBlocking{
+                dataStoreManager.getToken().first()
+
+            }
+            if(token!=null){
+                android.util.Log.d(
+                    "AUTH_INTERCEPTOR",
+                    "Sending token: $token"
+                )
+                requestBuilder.header(
+                    "Authorization",
+                    "Bearer $token"
+                )
+            }
+
         }
 
 
